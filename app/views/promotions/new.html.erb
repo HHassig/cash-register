@@ -1,0 +1,15 @@
+<div class="container">
+  <h1>New Promotion</h1>
+  <% if current_user && @user.admin? %>
+    <%= simple_form_for(@promotion) do |f| %>
+      <%= f.input :item_id %>
+      <%= f.input :name %>
+      <%= f.input :kind %>
+      <%= f.input :discount %>
+      <%= f.input :min_quantity %>
+      <%= f.submit %>
+    <% end %>
+  <% else %>
+    <h3>Insufficient privileges.</h3>
+  <% end %>
+</div>

@@ -1,0 +1,22 @@
+<div class="container">
+  <h1>Promotions</h1>
+  <% if current_user && @user.admin? %>
+    <%= link_to "New Promo", new_promotion_path %>
+  <% end %>
+  <div class="promos">
+    <% @promotions.each do |promotion| %>
+      <div class="promo-info">
+        <%= link_to promotion.name, promotion_path(promotion) %>
+        <%= promotion.kind %>
+        <%= promotion.discount %>
+        <%= Item.find(promotion.item_id).name %>
+      </div>
+      <% if current_user && @user.admin? %>
+        <div class="promo-links">
+          <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_promotion_path(promotion) %>
+          <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, promotion, method: :delete, data: { confirm: "Delete #{promotion.name}?" } %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

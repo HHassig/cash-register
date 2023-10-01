@@ -1,0 +1,9 @@
+<div class="container">
+  <div class="promotion-show-card">
+    <h1><%= @promotion.name %></h1>
+    <h3><%= link_to @item.name, item_path(@item) %></h3>
+    <p>Type: <strong><%= @promotion.kind %></strong></p>
+    <p>Discount: <strong><%= @promotion.discount %></strong></p>
+    <p>Minimum quantity: <strong><%= @promotion.min_quantity %></strong></p>
+  </div>
+</div>
