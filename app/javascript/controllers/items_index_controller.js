@@ -23,6 +23,25 @@ export default class extends Controller {
         displayCategory(category, items);
       });
     });
+
+    // Change value in text field in accordance with "+" or "-"
+    items.forEach((item) => {
+      let amount = parseInt(item.querySelector(".amount-js").value);
+      let plus = item.querySelector(".fa-circle-plus");
+      let minus = item.querySelector(".fa-circle-minus");
+      plus.addEventListener("click", function() {
+        amount += 1;
+        item.querySelector(".amount-js").value = amount;
+      });
+      minus.addEventListener("click", function() {
+        amount -= 1;
+        if (amount < 0) {
+          amount = 0;
+        }
+        item.querySelector(".amount-js").value = amount;
+      });
+    });
+
     function displayCategory(category, items) {
       items.forEach((item) => {
         // hide cards that arent the same category as selected
