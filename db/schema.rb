@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_30_142339) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_02_061900) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,6 +43,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_30_142339) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "subtotal"
+    t.float "savings"
+    t.bigint "item_id", null: false
+    t.index ["item_id"], name: "index_transactions_on_item_id"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
@@ -60,5 +64,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_30_142339) do
   end
 
   add_foreign_key "promotions", "items"
+  add_foreign_key "transactions", "items"
   add_foreign_key "transactions", "users"
 end

@@ -1,25 +1,24 @@
 <div class="container">
-  <div class="item-show-card">
+  <div class="item-show-card" data-controller="items-show">
     <%= "<img class='item-show' src='#{@item.photo}'>".html_safe %>
     <h1><%= @item.name %></h1>
     <p><%= @item.description %></p>
-    <div class="item-info">
+    <div class="item-infos">
+      <strong><%= @item.category.titleize %></strong>
+      <div class="add-remove">
+        <i class="fa-solid fa-circle-minus"></i>
+        <input type="text" class="amount-js" value="0">
+        <i class="fa-solid fa-circle-plus"></i>
+      </div>
+    </div>
+    <div class="item-infos">
       <strong>€<%= '%.2f' % @item.price %></strong>
       <% promotions = Promotion.where(item_id: @item.id) %>
       <% unless promotions == [] %>
-        <div class="promo-name">
-          <p><strong>Current Promos<strong></p>
-          <% promotions.each do |promotion| %>
-            <div class="spaced-row">
-              <%= link_to promotion.name, promotion_path(promotion) %>
-              <i class="fa-solid fa-circle-info"></i>
-            </div>
-          <% end %>
-        </div>
+        <i class="fa-solid fa-piggy-bank"></i>
       <% end %>
-      <div class="icons">
-        <i class="fa-solid fa-cart-plus"></i>
-      </div>
+      <i class="fa-solid fa-cart-plus"></i>
     </div>
+    <div class="item-id-hidden"><%= @item.id %></div>
   </div>
 </div>

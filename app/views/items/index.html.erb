@@ -5,12 +5,21 @@
     <% @categories.each do |category| %>
       <h5 id="category"><%= category.titleize %></h5>
     <% end %>
+    <div class="hover-container">
+      <h5 class="hover-target" tabindex="0"><i class="fa-solid fa-cart-shopping"></i></h5>
+      <aside class="hover-popup-cart">
+        <h3>Cart</h3>
+        <div class="cart-items"></div>
+        <div class="subtotal"></div>
+        <h5><i class="fa-solid fa-credit-card"></i></h5>
+      </aside>
+    </div>
   </div>
   <div class="items">
     <% @items.each do |item| %>
       <div class="item-card">
         <%= link_to "<img src='#{item.photo}'>".html_safe, item_path(item) %>
-        <h3><%= link_to item.name, item_path(item) %></h3>
+        <h3 id="item-name"><%= link_to item.name, item_path(item) %></h3>
         <div class="item-infos">
           <div class="hover-container">
             <i class="fa-solid fa-circle-info hover-target" tabindex="0"></i>
@@ -18,15 +27,19 @@
               <p><%= item.description %></p>
             </aside>
           </div>
-          <i class="fa-solid fa-cart-plus"></i>
-        </div>
-        <div class="item-infos">
-          <strong>€<%= '%.2f' % item.price %></strong>
           <div class="add-remove">
             <i class="fa-solid fa-circle-minus"></i>
             <input type="text" class="amount-js" value="0">
             <i class="fa-solid fa-circle-plus"></i>
           </div>
+        </div>
+        <div class="item-infos">
+          <strong id="item-price">€<%= '%.2f' % item.price %></strong>
+          <% promotions = Promotion.where(item_id: item.id) %>
+          <% unless promotions == [] %>
+            <i class="fa-solid fa-piggy-bank"></i>
+          <% end %>
+          <i class="fa-solid fa-cart-plus"></i>
         </div>
         <div class="category-hidden"><%= item.category.titleize %></div>
         <div class="item-id-hidden"><%= item.id %></div>

@@ -4,6 +4,8 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   connect() {
     const items = document.querySelectorAll(".item-card");
+    const cart = document.querySelector(".hover-popup-cart");
+    let subTotal = 0.0;
     let categories = [];
     let categoriesHTML = document.querySelectorAll("#category");
     //set "all" font-size on load
@@ -24,6 +26,8 @@ export default class extends Controller {
       });
     });
 
+    // cartItems = [amount, itemID, itemName, itemPrice]
+    let cartItems = [];
     // Change value in text field in accordance with "+" or "-"
     items.forEach((item) => {
       let amount = parseInt(item.querySelector(".amount-js").value);
@@ -40,8 +44,72 @@ export default class extends Controller {
         }
         item.querySelector(".amount-js").value = amount;
       });
+      // Add quantiy of items to "cart"
+      item.querySelector(".fa-cart-plus").addEventListener("click", function() {
+        // Get item info from rails into JS
+        let itemsLocation = cart.querySelector(".cart-items")
+        let itemName = item.querySelector("#item-name").innerText;
+        let itemID = parseInt(item.querySelector(".item-id-hidden").innerText);
+        let itemPrice = item.querySelector("#item-price").innerText;
+
+        //remove euro sign (will need to work with other currencies in future?)
+        let currencySign = itemPrice[0];
+        itemPrice = parseFloat(itemPrice.substring(1));
+        console.log(itemPrice);
+
+        // Add to cart on click
+        if (amount > 0) {
+          //check for duplicate items
+          cartItems = consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice);
+          itemsLocation.innerText = "";
+          subTotal = 0.0;
+          cartItems.forEach((cartItem) => {
+            itemsLocation.insertAdjacentHTML("beforeend", `<div class="cart-item">
+              <p id="cart-amount"><strong>${cartItem["quantity"]}</strong></p>
+              <p id="cart-name">${cartItem["name"]}</p>
+              <p id="cart-price">${currencySign}${(cartItem["quantity"] * cartItem["price"]).toFixed(2)}</p>
+              </div>`);
+            subTotal += (cartItem["quantity"] * cartItem["price"]);
+          });
+        }
+        // push subtotal display
+        printSubTotal(subTotal, currencySign);
+      });
     });
 
+
+    // Add listener to credit card ("pay") icon
+    let payIcon = document.querySelector(".fa-credit-card");
+    payIcon.addEventListener("click", function() {
+      console.log("hi mom");
+    });
+
+    function consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice) {
+      let unique = true;
+      cartItems.forEach((cartItem) => {
+        if (cartItem["id"] === itemID) {
+          unique = false;
+        }
+      });
+      if (!unique && cartItems.length > 0) {
+        cartItems.forEach((cartItem) => {
+          if (cartItem["id"] === itemID) {
+            cartItem["quantity"] += amount;
+          }
+        });
+      }
+      if (cartItems.length < 1 || unique) {
+        cartItems.push({quantity: amount, id: itemID, name: itemName, price: itemPrice});
+      }
+      return cartItems;
+    }
+    function printSubTotal(subTotal, currencySign) {
+      cart.querySelector(".subtotal").innerText = "";
+      cart.querySelector(".subtotal").insertAdjacentHTML("beforeend", `<div class="subtotal-line">
+      <h6>Total</h6>
+      <h6><strong>${currencySign}${subTotal.toFixed(2)}</strong></h6>
+      </div>`);
+    }
     function displayCategory(category, items) {
       items.forEach((item) => {
         // hide cards that arent the same category as selected
