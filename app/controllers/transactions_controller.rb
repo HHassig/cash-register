@@ -22,6 +22,14 @@ class TransactionsController < ApplicationController
     @transaction.save!
   end
 
+  def edit
+    @transaction = Transaction.find(params[:id])
+    @transaction.paid = true
+    if @transaction.save
+      redirect_to transaction_path(@transaction)
+    end
+  end
+
   private
 
   def transaction_params

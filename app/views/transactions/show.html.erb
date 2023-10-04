@@ -4,7 +4,7 @@
     <h1 id="transaction-h1">Transaction <%= @transaction.id %></h1>
     <div class="transaction-info">
       <h3>Total: €<%= '%.2f' % @transaction.subtotal %></h3>
-      <h5><%= @transaction.paid ? "Paid" : "<a class='no-decoration' href='#'>Pay now</a>".html_safe %></h5>
+      <h5><%= @transaction.paid ? "Paid" : "#{link_to "<i class='fa-solid fa-square-check'></i>Mark as paid".html_safe, edit_transaction_path(@transaction) }".html_safe %></h5>
     </div>
     <div id="baskets">
       <% @baskets.each do |basket| %>
