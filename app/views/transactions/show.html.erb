@@ -1,1 +1,29 @@
-hi
+<div class="container">
+<!-- User_id = 0 is a "guest account", these transactions will not be hidden -->
+  <% if current_user && current_user.id == @transaction.user_id || @transaction.user_id == 0%>
+    <h1 id="transaction-h1">Transaction <%= @transaction.id %></h1>
+    <div class="transaction-info">
+      <h3>Total: €<%= '%.2f' % @transaction.subtotal %></h3>
+      <h5><%= @transaction.paid ? "Paid" : "<a class='no-decoration' href='#'>Pay now</a>".html_safe %></h5>
+    </div>
+    <div id="baskets">
+      <% @baskets.each do |basket| %>
+        <div class="basket-card">
+          <% item = Item.find(basket.item_id) %>
+          <div class="card-left">
+            <p><%= item.name %></p>
+            <p>€<%= item.price %></p>
+          </div>
+          <div class="card-right">
+            <p>Amt: <strong><%= basket.quantity %></strong></p>
+            <p><strong>€<%= basket.quantity * item.price %></strong></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <h1>Invalid Transaction</h1>
+    <p>It looks like this isn't your transaction!</p>
+    <p>Please go to <%= link_to "your transactions", transactions_path %></p>
+  <% end %>
+</div>

@@ -2,11 +2,11 @@
   <h1>Edit "<%= @promotion.name %>"</h1>
   <% if current_user && @user.admin? %>
     <%= simple_form_for(@promotion) do |f| %>
-      <%= f.input :item_id %>
+      <%= f.input :kind, as: :radio_buttons, collection: @kinds %>
+      <%= f.input :item_id, collection: @items %>
       <%= f.input :name %>
-      <%= f.input :kind %>
-      <%= f.input :discount %>
-      <%= f.input :min_quantity %>
+      <%= f.input :discount, label: "Discount (as %); N/A for 'bogo'" %>
+      <%= f.input :min_quantity, label: "Min quantity; N/A for 'bogo'" %>
       <%= f.submit %>
     <% end %>
   <% else %>

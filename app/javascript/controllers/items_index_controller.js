@@ -71,7 +71,8 @@ export default class extends Controller {
               </div>`);
             subTotal += (cartItem["quantity"] * cartItem["price"]);
           });
-
+          //Animate cart plus icon
+          animate(item.querySelector(".fa-cart-plus"));
           // Create basket item in DB
           item.querySelector("#basket_item_id").value = itemID;
           item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id-hidden").innerText;
@@ -83,17 +84,6 @@ export default class extends Controller {
         // push subtotal display
         printSubTotal(subTotal, currencySign);
       });
-    });
-
-
-    // Add listener to credit card ("pay") icon
-    let payIcon = document.querySelector(".fa-credit-card");
-    payIcon.addEventListener("click", function() {
-      // let transactionSubTotal = document.querySelector("#transaction_subtotal");
-      // transactionSubTotal.value = "6.66";
-      // let transactionItemID = document.querySelector("#transaction_item_id");
-      // transactionItemID.value = "6";
-      // document.querySelector(".transaction-submit").click();
     });
 
     function consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice) {
@@ -138,6 +128,16 @@ export default class extends Controller {
         item.style.display = "block";
       });
     }
+
+    function animate(html) {
+      html.style.color = "teal";
+      html.style.fontSize = "2em";
+      sleep(1500).then(() => {
+        html.style.color = "black";
+        html.style.fontSize = "1.5em";
+      });
+    }
+
     function resetCategories(categoriesHTML) {
       categoriesHTML.forEach((category) => {
         category.style["background-color"] = "white";
@@ -146,6 +146,11 @@ export default class extends Controller {
         category.style["font-weight"] = "normal";
         category.style["font-size"] = "1em";
       });
+    }
+
+    function sleep(ms) {
+      console.log(`Sleeping for ${ms/1000} seconds...`)
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
   }
 }

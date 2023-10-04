@@ -2,7 +2,12 @@
   <div class="item-show-card" data-controller="items-show">
     <%= "<img class='item-show' src='#{@item.photo}'>".html_safe %>
     <h1><%= @item.name %></h1>
+    <div class="item-infos">
+      <strong><%= @item.category.titleize %></strong>
+      <strong>€<%= '%.2f' % @item.price %></strong>
+    </div>
     <p><%= @item.description %></p>
+    <!--
     <div class="item-infos">
       <strong><%= @item.category.titleize %></strong>
       <div class="add-remove">
@@ -19,6 +24,7 @@
       <% end %>
       <i class="fa-solid fa-cart-plus"></i>
     </div>
+    -->
     <div class="item-id-hidden"><%= @item.id %></div>
   </div>
 </div>

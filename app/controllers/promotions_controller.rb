@@ -11,6 +11,8 @@ class PromotionsController < ApplicationController
 
   def new
     @user = current_user
+    @items = Item.all
+    @kinds = ["bogo", "bulk"]
     @promotion = Promotion.new
   end
 
@@ -26,6 +28,8 @@ class PromotionsController < ApplicationController
   def edit
     @user = current_user
     @promotion = Promotion.find(params[:id])
+    @items = Item.all
+    @kinds = ["bogo", "bulk"]
   end
 
   def update
