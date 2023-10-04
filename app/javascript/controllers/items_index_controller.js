@@ -49,7 +49,7 @@ export default class extends Controller {
         // Get item info from rails into JS
         let itemsLocation = cart.querySelector(".cart-items")
         let itemName = item.querySelector("#item-name").innerText;
-        let itemID = parseInt(item.querySelector(".item-id-hidden").innerText);
+        let itemID = parseInt(item.querySelector("#item-id-hidden").innerText);
         let itemPrice = item.querySelector("#item-price").innerText;
 
         //remove euro sign (will need to work with other currencies in future?)
@@ -71,6 +71,14 @@ export default class extends Controller {
               </div>`);
             subTotal += (cartItem["quantity"] * cartItem["price"]);
           });
+
+          // Create basket item in DB
+          item.querySelector("#basket_item_id").value = itemID;
+          item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id-hidden").innerText;
+          item.querySelector("#basket_quantity").value = amount;
+          console.log(item.querySelector("#basket_promotion_id"));
+          item.querySelector("#basket_promotion_id").value = item.querySelector(".promotion-hidden").innerText;
+          item.querySelector(".basket-submit").click();
         }
         // push subtotal display
         printSubTotal(subTotal, currencySign);
@@ -81,7 +89,11 @@ export default class extends Controller {
     // Add listener to credit card ("pay") icon
     let payIcon = document.querySelector(".fa-credit-card");
     payIcon.addEventListener("click", function() {
-      console.log("hi mom");
+      // let transactionSubTotal = document.querySelector("#transaction_subtotal");
+      // transactionSubTotal.value = "6.66";
+      // let transactionItemID = document.querySelector("#transaction_item_id");
+      // transactionItemID.value = "6";
+      // document.querySelector(".transaction-submit").click();
     });
 
     function consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice) {
@@ -113,7 +125,7 @@ export default class extends Controller {
     function displayCategory(category, items) {
       items.forEach((item) => {
         // hide cards that arent the same category as selected
-        if (item.querySelector(".category-hidden").innerText !== category.innerText) {
+        if (item.querySelector("#category-hidden").innerText !== category.innerText) {
           item.style.display = "none";
         }
         if (category.innerText == "All") {

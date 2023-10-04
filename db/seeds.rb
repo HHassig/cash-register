@@ -24,3 +24,4 @@ items.each do |item|
   puts "Saved!"
 end
 puts Item.first.name
+User.create!(email: "admin@admin.com", password: "asdfasdf", admin: true)

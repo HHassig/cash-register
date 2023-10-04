@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_061900) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_04_012736) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "baskets", force: :cascade do |t|
+    t.integer "item_id"
+    t.integer "transaction_id"
+    t.integer "quantity"
+    t.integer "promotion_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "items", force: :cascade do |t|
     t.string "product_code"
@@ -40,14 +49,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_061900) do
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "subtotal"
     t.float "savings"
-    t.bigint "item_id", null: false
-    t.index ["item_id"], name: "index_transactions_on_item_id"
-    t.index ["user_id"], name: "index_transactions_on_user_id"
+    t.integer "user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -64,6 +70,4 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_061900) do
   end
 
   add_foreign_key "promotions", "items"
-  add_foreign_key "transactions", "items"
-  add_foreign_key "transactions", "users"
 end

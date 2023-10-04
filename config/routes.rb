@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   root to: "items#index"
   resources :items
   resources :promotions
+  resources :transactions
+  resources :baskets
 end

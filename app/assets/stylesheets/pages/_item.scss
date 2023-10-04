@@ -240,7 +240,7 @@
   font-weight: bold;
   font-size: 1em;
 }
-.category-hidden, .item-id-hidden {
+#category-hidden, #item-id-hidden, .basket-form-hidden, #transaction-id-hidden, .promotion-hidden {
   display: none;
 }
 

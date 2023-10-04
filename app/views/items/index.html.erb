@@ -29,20 +29,32 @@
           </div>
           <div class="add-remove">
             <i class="fa-solid fa-circle-minus"></i>
-            <input type="text" class="amount-js" value="0">
+            <input type="text" class="amount-js" value="1">
             <i class="fa-solid fa-circle-plus"></i>
           </div>
         </div>
         <div class="item-infos">
           <strong id="item-price">€<%= '%.2f' % item.price %></strong>
-          <% promotions = Promotion.where(item_id: item.id) %>
-          <% unless promotions == [] %>
+          <% promotion = Promotion.find_by(item_id: item.id) %>
+          <%= promotion %>
+          <% unless promotion.nil?%>
             <i class="fa-solid fa-piggy-bank"></i>
+            <div class="promotion-hidden"><%= promotion.id %></div>
+          <% else %>
+            <div class="promotion-hidden">0</div>
           <% end %>
           <i class="fa-solid fa-cart-plus"></i>
         </div>
-        <div class="category-hidden"><%= item.category.titleize %></div>
-        <div class="item-id-hidden"><%= item.id %></div>
+        <div id="category-hidden"><%= item.category.titleize %></div>
+        <div id="item-id-hidden"><%= item.id %></div>
+        <div id="transaction-id-hidden"><%= @transaction.id %></div>
+        <%= simple_form_for @basket, :html => { class: "basket-form-hidden" } do |f| %>
+          <%= f.input :item_id, class: "basket-item-id" %>
+          <%= f.input :transaction_id, class: "basket-transaction-id" %>
+          <%= f.input :quantity, class: "basket-quantity" %>
+          <%= f.input :promotion_id, class: "basket-promotion-id" %>
+          <%= f.submit "Submit", class: "basket-submit" %>
+        <% end %>
       </div>
     <% end %>
   </div>
