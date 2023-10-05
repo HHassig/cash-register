@@ -10,4 +10,29 @@
 .new-promotion-form {
   width: 33%;
   margin: auto;
+  background: white;
+  padding: 1em 2em;
+  border-radius: 1em;
+}
+.promotion_kind {
+  margin: auto;
+  width: 5em;
+}
+.form-label, .col-form-label {
+  font-weight: bold;
+}
+@media (max-width: 1200px) {
+  .new-promotion-form {
+    width: 40%;
+  }
+}
+@media (max-width: 995px) {
+  .new-promotion-form {
+    width: 66%;
+  }
+}
+@media (max-width: 600px) {
+  .new-promotion-form {
+    width: 85%;
+  }
 }

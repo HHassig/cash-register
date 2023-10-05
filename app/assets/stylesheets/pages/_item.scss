@@ -145,11 +145,13 @@
 
 .hover-container {
   position: relative;
+  align-items: center;
 }
 
 .hover-target {
   position: relative;
-  /* font-size: 2rem; */
+  margin-top: 0em;
+  margin-bottom: 0em;
 }
 
 .hover-popup {

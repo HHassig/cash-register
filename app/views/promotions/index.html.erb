@@ -14,7 +14,7 @@
       <% if current_user && @user.admin? %>
         <div class="promo-links">
           <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_promotion_path(promotion) %>
-          <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, promotion, method: :delete, data: { confirm: "Delete #{promotion.name}?" } %>
+          <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, promotion_path(promotion), data: { turbo_method: "delete", turbo_confirm: "Delete #{promotion.name} ?" } %>
         </div>
       <% end %>
     <% end %>
