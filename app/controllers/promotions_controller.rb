@@ -24,7 +24,7 @@ class PromotionsController < ApplicationController
     # Set buy one get one discount to 50%
     if @promotion.kind == "bogo"
       @promotion.discount = 50
-      @promotion.minimum = 1
+      @promotion.min_quantity = 1
     end
     if @promotion.save
       redirect_to promotion_path(@promotion), notice: 'Promotion was successfully created.'
