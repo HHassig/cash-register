@@ -1,21 +1,22 @@
 <div class="container">
+  <h1 id="promotion-show"><%= @item.name %></h1>
+  <h3><%= link_to "<i class='fa-solid fa-backward'></i>".html_safe, items_path %></h3>
   <div class="item-show-card" data-controller="items-show">
     <%= "<img class='item-show' src='#{@item.photo}'>".html_safe %>
-    <h1><%= @item.name %></h1>
     <div class="item-infos">
       <strong><%= @item.category.titleize %></strong>
-      <% promotion = Promotion.find_by(item_id: @item.id) %>
-          <% unless promotion.nil?%>
+      <% promotion = Promotion.find_by(item_id: @item.id, active: true) %>
+          <% unless promotion.nil? %>
             <div class="hover-container">
               <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
               <aside class="hover-popup-cart">
                 <h5><%= promotion.name %></h5>
-                <% unless promotion.discount.nil? %>
-                  <p><%= promotion.discount %>% off</p>
-                  <p><%= promotion.min_quantity %> minimum</p>
+                <% if promotion.kind == "bogo" %>
+                  <p><strong><%= promotion.discount.to_i %></strong>% off</p>
                 <% else %>
-                  <p>BOGO: 50% off</p>
+                  <p>Now: €<strong><%= promotion.promo_price %></strong></p>
                 <% end %>
+                <p>Minimum: <strong><%= promotion.min_quantity %></strong></p>
               </aside>
             </div>
             <div class="promotion-hidden"><%= promotion.id %></div>
@@ -25,6 +26,14 @@
       <strong>€<%= '%.2f' % @item.price %></strong>
     </div>
     <p><%= @item.description %></p>
+    <div class="item-infos">
+      <% if @user != "guest" && @user.admin? %>
+        <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_item_path(@item) %>
+      <% end %>
+      <% if @item.inventory_remaining < 1 %>
+        Sold out!
+      <% end %>
+    </div>
     <!--
     <div class="item-infos">
       <strong><%= @item.category.titleize %></strong>

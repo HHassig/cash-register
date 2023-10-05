@@ -29,6 +29,12 @@
               <p><%= item.description %></p>
             </aside>
           </div>
+          <% if @user != "guest" && @user.admin? %>
+            <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_item_path(item) %>
+          <% end %>
+          <% if item.inventory_remaining < 1 %>
+            Sold out!
+          <% end %>
           <div class="add-remove">
             <i class="fa-solid fa-circle-minus"></i>
             <input type="text" class="amount-js" value="1">
@@ -37,13 +43,17 @@
         </div>
         <div class="item-infos">
           <strong id="item-price">€<%= '%.2f' % item.price %></strong>
-          <% promotion = Promotion.find_by(item_id: item.id) %>
+          <% promotion = Promotion.find_by(item_id: item.id, active: true) %>
           <% unless promotion.nil?%>
             <div class="hover-container">
               <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
               <aside class="hover-popup-cart">
                 <h5><%= link_to promotion.name, promotion_path(promotion) %></h5>
-                <p><strong><%= promotion.discount.to_i %></strong>% off</p>
+                <% if promotion.kind == "bogo" %>
+                  <p><strong><%= promotion.discount.to_i %></strong>% off</p>
+                <% else %>
+                  <p>Now: €<strong><%= promotion.promo_price %></strong></p>
+                <% end %>
                 <p><strong><%= promotion.min_quantity %></strong> minimum</p>
               </aside>
             </div>

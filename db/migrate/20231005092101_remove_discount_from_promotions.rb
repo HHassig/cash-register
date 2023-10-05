@@ -1,0 +1,5 @@
+class RemoveDiscountFromPromotions < ActiveRecord::Migration[7.0]
+  def change
+    remove_column :promotions, :discount, :float
+  end
+end

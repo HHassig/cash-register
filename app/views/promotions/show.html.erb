@@ -6,7 +6,11 @@
 
     <h3><%= link_to @item.name, item_path(@item) %></h3>
     <p>Type: <strong><%= @promotion.kind.capitalize %></strong></p>
-    <p>Discount: <strong><%= @promotion.discount %>%</strong></p>
+    <% if @promotion.kind == "bogo" %>
+      <p><strong><%= @promotion.discount.to_i %></strong>% off</p>
+    <% else %>
+      <p>Now: €<strong><%= @promotion.promo_price %></strong></p>
+    <% end %>
     <p>Minimum quantity: <strong><%= @promotion.min_quantity %></strong></p>
     <p>Status: <strong><%= @promotion.active ? "Active" : "Expired" %></strong></p>
     <% if current_user && @user.admin? %>

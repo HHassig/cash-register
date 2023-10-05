@@ -6,8 +6,8 @@
         <%= f.input :kind, as: :radio_buttons, collection: @kinds, class: "radio-promotion" %>
         <%= f.input :item_id, collection: @items %>
         <%= f.input :name %>
-        <%= f.input :discount, label: "Discount (as %); N/A for 'bogo'" %>
         <%= f.input :min_quantity, label: "Min quantity; N/A for 'bogo'" %>
+        <%= f.input :promo_price, label: "New Price; N/A for 'bogo'" %>
         <%= f.submit %>
       <% end %>
     </div>

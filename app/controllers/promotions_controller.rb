@@ -24,7 +24,7 @@ class PromotionsController < ApplicationController
     # Set buy one get one discount to 50%
     if @promotion.kind == "bogo"
       @promotion.discount = 50
-      @promotion.min_quantity = 1
+      @promotion.min_quantity = 2
     end
     if @promotion.save
       redirect_to promotion_path(@promotion), notice: 'Promotion was successfully created.'
@@ -58,6 +58,6 @@ class PromotionsController < ApplicationController
   private
 
   def promotion_params
-    params.require(:promotion).permit(:name, :kind, :item_id, :min_quantity, :discount, :active)
+    params.require(:promotion).permit(:name, :kind, :item_id, :min_quantity, :discount, :active, :promo_price)
   end
 end

@@ -12,6 +12,7 @@ export default class extends Controller {
     categoriesHTML.forEach((category) => {
       categories.push(category.innerText);
     });
+    displayCategory(categoriesHTML[0], promotions);
     categoriesHTML.forEach((category) => {
       category.addEventListener("click", function() {
         displayAll(promotions);

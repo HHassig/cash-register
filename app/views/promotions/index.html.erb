@@ -4,8 +4,8 @@
     <h4><%= link_to "<i class='fa-solid fa-circle-plus'></i>".html_safe, new_promotion_path %></h4>
   <% end %>
   <div class="categories">
-    <h5 id="category">All</h5>
     <h5 id="category">Active</h5>
+    <h5 id="category">All</h5>
     <h5 id="category">Expired</h5>
   </div>
   <div class="items">
@@ -20,7 +20,11 @@
           <h6><%= promotion.active ? "<i class='fa-solid fa-circle-check'></i>".html_safe : "<i class='fa-solid fa-circle-xmark'></i>".html_safe %></h6>
         </div>
         <div class="promo-infos">
-          <p><%= promotion.discount.to_i %>% off</p>
+          <% if promotion.kind == "bogo" %>
+            <p><strong><%= promotion.discount.to_i %></strong>% off</p>
+          <% else %>
+            <p>Now: €<strong><%= promotion.promo_price %></strong></p>
+          <% end %>
           <p><strong><%= promotion.min_quantity %></strong> minimum</p>
         </div>
         <% if current_user && @user.admin? %>
