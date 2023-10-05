@@ -7,6 +7,7 @@ class PromotionsController < ApplicationController
   def show
     @promotion = Promotion.find(params[:id])
     @item = Item.find(@promotion.item_id)
+    @user = current_user
   end
 
   def new
@@ -18,6 +19,13 @@ class PromotionsController < ApplicationController
 
   def create
     @promotion = Promotion.new(promotion_params)
+    # New promotion defaulted to active
+    @promotion.active = true
+    # Set buy one get one discount to 50%
+    if @promotion.kind == "bogo"
+      @promotion.discount = 50
+      @promotion.minimum = 1
+    end
     if @promotion.save
       redirect_to promotion_path(@promotion), notice: 'Promotion was successfully created.'
     else
@@ -35,7 +43,7 @@ class PromotionsController < ApplicationController
   def update
     @promotion = Promotion.find(params[:id])
     if @promotion.update(promotion_params)
-      redirect_to promotion_path(@promotion)
+      redirect_back(fallback_location: promotions_path)
     else
       redirect_to new_promotion_path(@promotion), status: :unprocessable_entity
     end
@@ -43,7 +51,6 @@ class PromotionsController < ApplicationController
 
   def destroy
     @promotion = Promotion.find(params[:id])
-    # raise
     @promotion.destroy!
     redirect_to promotions_path, notice: 'Promotion was successfully destroyed.', status: :see_other
   end
@@ -51,6 +58,6 @@ class PromotionsController < ApplicationController
   private
 
   def promotion_params
-    params.require(:promotion).permit(:name, :kind, :item_id, :min_quantity, :discount)
+    params.require(:promotion).permit(:name, :kind, :item_id, :min_quantity, :discount, :active)
   end
 end

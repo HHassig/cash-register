@@ -248,6 +248,12 @@
 #category-hidden, #item-id-hidden, .basket-form-hidden, #transaction-id-hidden, .promotion-hidden, .item-id-hidden {
   display: none;
 }
+.item-card h3 {
+  margin-top: 0.5em;
+}
+.item-card h6 {
+  margin-top: 0.5em;
+}
 
 @media (max-width: 1200px) {
   .items {

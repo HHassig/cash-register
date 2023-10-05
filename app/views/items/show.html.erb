@@ -4,6 +4,24 @@
     <h1><%= @item.name %></h1>
     <div class="item-infos">
       <strong><%= @item.category.titleize %></strong>
+      <% promotion = Promotion.find_by(item_id: @item.id) %>
+          <% unless promotion.nil?%>
+            <div class="hover-container">
+              <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
+              <aside class="hover-popup-cart">
+                <h5><%= promotion.name %></h5>
+                <% unless promotion.discount.nil? %>
+                  <p><%= promotion.discount %>% off</p>
+                  <p><%= promotion.min_quantity %> minimum</p>
+                <% else %>
+                  <p>BOGO: 50% off</p>
+                <% end %>
+              </aside>
+            </div>
+            <div class="promotion-hidden"><%= promotion.id %></div>
+          <% else %>
+            <div class="promotion-hidden">0</div>
+          <% end %>
       <strong>€<%= '%.2f' % @item.price %></strong>
     </div>
     <p><%= @item.description %></p>

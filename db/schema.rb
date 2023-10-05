@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_04_071228) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_05_062642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,6 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_04_071228) do
     t.float "discount"
     t.string "kind"
     t.string "name"
+    t.boolean "active"
     t.index ["item_id"], name: "index_promotions_on_item_id"
   end
 

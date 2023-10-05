@@ -42,7 +42,13 @@
             <div class="hover-container">
               <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
               <aside class="hover-popup-cart">
-                <%= promotion.name %>
+                <h5><%= promotion.name %></h5>
+                <% unless promotion.discount.nil? %>
+                  <p><%= promotion.discount %>% off</p>
+                  <p><%= promotion.min_quantity %> minimum</p>
+                <% else %>
+                  <p>BOGO: 50% off</p>
+                <% end %>
               </aside>
             </div>
             <div class="promotion-hidden"><%= promotion.id %></div>

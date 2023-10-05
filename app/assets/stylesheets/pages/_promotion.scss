@@ -18,6 +18,30 @@
   margin: auto;
   width: 5em;
 }
+.fa-circle-check {
+  color: green;
+}
+.fa-circle-xmark {
+  color: red;
+}
+.promo-links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 30%;
+  margin: auto;
+  margin-top: 0.5em;
+}
+.promo-infos {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 0.5em;
+}
+#promotion-show {
+margin-bottom: 0em;
+}
 .form-label, .col-form-label {
   font-weight: bold;
 }
