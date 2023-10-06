@@ -11,7 +11,7 @@
     <% else %>
       <p>€<s><%= @item.price %></s> €<strong><%= @promotion.promo_price %></strong></p>
     <% end %>
-    <p>Minimum quantity: <strong><%= @promotion.min_quantity %></strong></p>
+    <p>Minimum: <strong><%= @promotion.min_quantity %></strong></p>
     <p>Status: <strong><%= @promotion.active ? "Active" : "Expired" %></strong></p>
     <% if current_user && @user.admin? %>
       <div class="promo-links">

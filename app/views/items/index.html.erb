@@ -9,7 +9,18 @@
       <h5 class="hover-target" tabindex="0"><i class="fa-solid fa-cart-shopping"></i></h5>
       <aside class="hover-popup-cart">
         <h3>Cart</h3>
-        <div class="cart-items"></div>
+        <div class="cart-items">
+          <% @baskets.each do |basket| %>
+            <div class="cart-item">
+              <p id="cart-amount"><strong><%= basket.quantity %></strong></p>
+              <p id="cart-name"><%= Item.find(basket.item_id).name %></p>
+              <p id="cart-subtotal">€<%= '%.2f' % basket.subtotal %></p>
+              <p id="cart-item-price" class="hidden"><%= basket.cost_per_item %></p>
+              <p id="cart-item-id"><%= Item.find(basket.item_id).id %></p>
+              <p id="cart-promo-id"><%= basket.promotion_id %></p>
+            </div>
+          <% end %>
+        </div>
         <div class="subtotal"></div>
         <%= link_to(@transaction) do %>
           <h5><i class="fa-solid fa-credit-card"></i></h5>
@@ -77,6 +88,8 @@
           <%= f.input :transaction_id, class: "basket-transaction-id" %>
           <%= f.input :quantity, class: "basket-quantity" %>
           <%= f.input :promotion_id, class: "basket-promotion-id" %>
+          <%= f.input :subtotal, class: "basket-subtotal" %>
+          <%= f.input :cost_per_item, class: "cost-per-item" %>
           <%= f.submit "Submit", class: "basket-submit" %>
         <% end %>
       </div>

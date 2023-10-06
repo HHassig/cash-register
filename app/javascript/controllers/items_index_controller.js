@@ -7,7 +7,6 @@ export default class extends Controller {
     const cart = document.querySelector(".hover-popup-cart");
     let subTotal = 0.0;
     let categories = [];
-    let basketTotal = 0.0;
     let categoriesHTML = document.querySelectorAll("#category");
     //set "all" font-size on load
     categoriesHTML[0].style["font-size"] = "1.5em";
@@ -28,7 +27,8 @@ export default class extends Controller {
     });
 
     // cartItems = [amount, itemID, itemName, itemPrice]
-    let cartItems = [];
+    let cartItems = getOldItems(document.querySelectorAll(".cart-item"));
+    console.log(cartItems);
     // Change value in text field in accordance with "+" or "-"
     items.forEach((item) => {
       let amount = parseInt(item.querySelector(".amount-js").value);
@@ -60,7 +60,9 @@ export default class extends Controller {
         let itemPromo = {id: promoID, newPrice: salePrice, minimum: minQuantity, kind: promoKind, itemID: itemID};
         //remove euro sign (will need to work with other currencies in future?)
         let currencySign = itemPrice[0];
+        console.log(itemPrice);
         itemPrice = parseFloat(itemPrice.substring(1));
+        console.log(itemPrice);
 
         // Add to cart on click
         if (amount > 0) {
@@ -70,7 +72,7 @@ export default class extends Controller {
           itemsLocation.innerText = "";
           subTotal = 0.0;
           cartItems.forEach((cartItem) => {
-            basketTotal = cartItem["quantity"] * cartItem["price"];
+            let basketTotal = cartItem["quantity"] * itemPrice;
             if (parseInt(cartItem["id"]) === itemPromo["itemID"] && itemPromo["minimum"] <= parseInt(cartItem["quantity"]) && itemPromo["kind"] == "bulk") {
               cartItem["price"] = itemPromo["newPrice"];
               basketTotal = cartItem["quantity"] * cartItem["price"];
@@ -78,39 +80,51 @@ export default class extends Controller {
             if (parseInt(cartItem["id"]) === itemPromo["itemID"] && itemPromo["kind"] === "bogo") {
               // Add double items and then re-calculate price as "half quantity, same price"
               cartItem["quantity"] += amount;
-              basketTotal = (cartItem["quantity"] / 2) * cartItem["price"];
+              basketTotal = (cartItem["quantity"] / 2) * itemPrice;
+              itemPrice /= 2;
             }
             itemsLocation.insertAdjacentHTML("beforeend", `<div class="cart-item">
               <p id="cart-amount"><strong>${cartItem["quantity"]}</strong></p>
               <p id="cart-name">${cartItem["name"]}</p>
-              <p id="cart-price">${currencySign}${(basketTotal).toFixed(2)}</p>
+              <p id="cart-subtotal">${currencySign}${(parseFloat(basketTotal).toFixed(2))}</p>
               </div>`);
             subTotal += (basketTotal);
+            // console.log(basketTotal);
+            createBasket(cartItem, item, basketTotal, itemPrice, amount);
           });
           //Animate cart plus icon
           animate(item.querySelector(".fa-cart-plus"));
         }
         // push subtotal display
         printSubTotal(subTotal, currencySign);
-        createBasket(document.querySelector(".fa-credit-card"), cartItems, item);
       });
     });
 
-    function createBasket(icon, cartItems, item) {
-      icon.addEventListener("click", function() {
-        cartItems.forEach((cartItem) => {
-          let itemID = parseInt(item.querySelector("#item-id-hidden").innerText);
-          let cartItemID = cartItem["id"];
-          if (itemID == cartItemID) {
-            console.log(`${itemID} : ${cartItemID}`);
-            item.querySelector("#basket_item_id").value = item.querySelector("#item-id-hidden").innerText;
-            item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id-hidden").innerText;
-            item.querySelector("#basket_quantity").value = cartItem["quantity"];
-            item.querySelector("#basket_promotion_id").value = cartItem["promoID"];
-            item.querySelector(".basket-submit").click();
-          }
-        });
+    function getOldItems(oldCart) {
+      let cartItems = []
+      oldCart.forEach((oldItem) => {
+        let amount = parseInt(oldItem.querySelector("#cart-amount").innerText);
+        let itemID = parseInt(oldItem.querySelector("#cart-item-id").innerText);
+        let itemName = oldItem.querySelector("#cart-name").innerText;
+        let promoID = parseInt(oldItem.querySelector("#cart-promo-id").innerText);
+        let itemPrice = oldItem.querySelector("#cart-item-price").innerText;
+        cartItems.push({quantity: amount, id: itemID, name: itemName, price: itemPrice, promoID: promoID});
       });
+      return cartItems;
+    }
+
+    function createBasket(cartItem, item, basketTotal, itemPrice, amount) {
+      let itemID = parseInt(item.querySelector("#item-id-hidden").innerText);
+      let cartItemID = cartItem["id"];
+      if (itemID == cartItemID) {
+        item.querySelector("#basket_item_id").value = item.querySelector("#item-id-hidden").innerText;
+        item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id-hidden").innerText;
+        item.querySelector("#basket_quantity").value = amount;
+        item.querySelector("#basket_promotion_id").value = cartItem["promoID"];
+        item.querySelector("#basket_subtotal").value = basketTotal;
+        item.querySelector("#basket_cost_per_item").value = itemPrice;
+        item.querySelector(".basket-submit").click();
+      }
     }
 
     function consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice, promoID) {

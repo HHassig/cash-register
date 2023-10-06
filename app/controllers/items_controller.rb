@@ -6,6 +6,7 @@ class ItemsController < ApplicationController
     @transaction = Transaction.create(user_id: 0) unless current_user
     @transaction = find_unpaid_transaction(current_user.id).first if current_user
     @transaction = Transaction.create(user_id: current_user.id) if current_user && @transaction.nil?
+    @baskets = Basket.where(transaction_id: @transaction.id)
     @basket = Basket.new
     @user = current_user ? current_user : "guest"
   end

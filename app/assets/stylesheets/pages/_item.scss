@@ -234,6 +234,9 @@
   color: rgb(200, 20, 0);
   font-weight: 700;
 }
+.hidden {
+  display: none;
+}
 .hover-popup-cart span {
   color: rgb(200, 20, 0);
   font-weight: 700;
@@ -245,7 +248,7 @@
   font-weight: bold;
   font-size: 1em;
 }
-#category-hidden, #item-id-hidden, .basket-form-hidden, #transaction-id-hidden, .promotion-hidden, .item-id-hidden, #promotion-id-hidden, #promotion-minimum-hidden, #promotion-price-hidden, #promotion-kind-hidden, .promotion_promo_price, .promotion_min_quantity {
+#category-hidden, #item-id-hidden, .basket-form-hidden, #transaction-id-hidden, .promotion-hidden, .item-id-hidden, #promotion-id-hidden, #promotion-minimum-hidden, #promotion-price-hidden, #promotion-kind-hidden, .promotion_promo_price, .promotion_min_quantity, #cart-item-id, #cart-promo-id {
   display: none;
 }
 .item-card h3 {
