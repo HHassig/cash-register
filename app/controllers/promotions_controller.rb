@@ -37,7 +37,7 @@ class PromotionsController < ApplicationController
     @user = current_user
     @promotion = Promotion.find(params[:id])
     @items = Item.all
-    @kinds = ["bogo", "bulk"]
+    @kinds = ["bulk", "bogo"]
   end
 
   def update

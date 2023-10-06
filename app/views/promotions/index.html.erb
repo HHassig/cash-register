@@ -15,9 +15,9 @@
         <%= link_to "<img src='#{item.photo}'>".html_safe, promotion_path(promotion) %>
         <h3><%= link_to promotion.name, promotion_path(promotion) %></h3>
         <h5><%= link_to item.name, item_path(item) %></h5>
-        <div class="promo-links">
+        <div class="promo-links-wide">
           <h6><strong><%= promotion.kind.capitalize %></strong>
-          <h6><%= promotion.active ? "<i class='fa-solid fa-circle-check'></i>".html_safe : "<i class='fa-solid fa-circle-xmark'></i>".html_safe %></h6>
+          <h6><%= promotion.active ? "<i class='fa-solid fa-circle-check'>Active</i>".html_safe : "<i class='fa-solid fa-circle-xmark'>Inactive</i>".html_safe %></h6>
         </div>
         <div class="promo-infos">
           <% if promotion.kind == "bogo" %>

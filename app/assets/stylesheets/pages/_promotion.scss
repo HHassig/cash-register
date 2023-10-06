@@ -32,6 +32,14 @@
   margin: auto;
   margin-top: 0.5em;
 }
+.promo-links-wide {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  // width: 30%;
+  margin: auto;
+  margin-top: 0.5em;
+}
 .promo-infos {
   display: flex;
   flex-direction: row;

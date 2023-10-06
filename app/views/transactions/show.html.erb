@@ -36,6 +36,7 @@
                 <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
                 <aside class="hover-popup">
                   <h5><%= link_to promotion.name, promotion_path(promotion) %></h5>
+                  <%= promotion.active ? "<i class='fa-solid fa-circle-check'>Active</i>".html_safe : "<i class='fa-solid fa-circle-xmark'>Inactive</i>".html_safe %>
                   <% if promotion.kind == "bogo" %>
                     <p><strong>Buy 1 Get 1</strong></p>
                   <% else %>
