@@ -5,10 +5,12 @@ class TransactionsController < ApplicationController
   end
 
   def show
-    @user = current_user ? current_user : 0
+    @user_id = current_user ? current_user.id : 0
     @transaction = Transaction.find(params[:id])
-    @baskets = condense_baskets(Basket.where(transaction_id: @transaction.id))
+    # @baskets = condense_baskets(Basket.where(transaction_id: @transaction.id))
+    @baskets = Basket.where(transaction_id: @transaction.id)
     @transaction.subtotal = get_subtotal(@baskets)
+    @transaction.savings = get_savings(@baskets)
     @transaction.save!
   end
 
@@ -39,30 +41,33 @@ class TransactionsController < ApplicationController
   def condense_baskets(baskets)
     condensed = []
     unique_items = baskets.distinct.pluck(:item_id)
+    unique_items_info = []
     unique_items.each do |item|
       quantity = 0
-      temp = []
-      baskets.each_with_index do |basket, index|
+      baskets.each do |basket|
         if item == basket.item_id
           quantity += basket.quantity
         end
-        temp = [basket, quantity]
       end
+      transaction_id = baskets.first.transaction_id
       condensed << { item_id: item,
-        transaction_id: temp[0].transaction_id,
+        transaction_id: transaction_id,
         promotion_id: temp[0].promotion_id,
-        quantity: temp[1] }
+        id: temp[0].id,
+        quantity: quantity }
     end
+    raise
     condensed
   end
 
   def get_subtotal(baskets)
     subtotal = 0.0
     baskets.each do |basket|
+      promotion = Promotion.find(basket[:promotion_id]) if basket[:promotion_id] && basket[:promotion_id] > 0
       if basket[:promotion_id] < 1
         subtotal += basket[:quantity] * Item.find(basket[:item_id]).price
       else
-        if basket[:quantity] >= Promotion.find(basket[:promotion_id]).min_quantity
+        if basket[:quantity] >= promotion.min_quantity && promotion.kind == "bulk"
           subtotal += basket[:quantity] * Promotion.find(basket[:promotion_id]).promo_price
         else
           subtotal += basket[:quantity] * Item.find(basket[:item_id]).price
@@ -70,5 +75,16 @@ class TransactionsController < ApplicationController
       end
     end
     subtotal
+  end
+
+  def get_savings(baskets)
+    savings = 0.0
+    savings_array = []
+    baskets.each do |basket|
+      if basket[:promotion_id] > 0
+        savings += basket[:quantity] * (Item.find(basket[:item_id]).price - Promotion.find(basket[:promotion_id]).promo_price)
+      end
+    end
+    savings
   end
 end

@@ -60,11 +60,12 @@
             <div id="promotion-id-hidden"><%= promotion.id %></div>
             <div id="promotion-minimum-hidden"><%= promotion.min_quantity %></div>
             <div id="promotion-price-hidden"><%= promotion.promo_price %></div>
+            <div id="promotion-kind-hidden"><%= promotion.kind %></div>
           <% else %>
             <div id="promotion-minimum-hidden">0</div>
+            <div id="promotion-kind-hidden">none</div>
             <div id="promotion-id-hidden">0</div>
             <div id="promotion-price-hidden">0</div>
-
           <% end %>
           <i class="fa-solid fa-cart-plus"></i>
         </div>

@@ -21,7 +21,7 @@ items.each do |item|
     photo: item[8]
   )
   add_item.save!
-  puts "Saved!"
+  puts "Item saved"
 end
-puts Item.first.name
-User.create!(email: "admin@admin.com", password: "asdfasdf", admin: true)
+User.create!(email: "admin@test.com", password: "123456", admin: true)
+User.create!(email: "user@test.com", password: "123456", admin: false)

@@ -1,33 +1,57 @@
 <div class="container">
 <!-- User_id = 0 is a "guest account", these transactions will not be hidden -->
-  <% if current_user && current_user.id == @transaction.user_id || @transaction.user_id == 0%>
+  <% if @user_id == @transaction.user_id || @transaction.user_id == 0 %>
     <h1 id="transaction-h1">Transaction <%= @transaction.id %></h1>
+    <h3><%= link_to "<i class='fa-solid fa-backward'></i>".html_safe, transactions_path %></h3>
     <div class="transaction-info">
       <h3>Total: €<%= '%.2f' % @transaction.subtotal %></h3>
+      <h4>Savings: €<%= '%.2f' % @transaction.savings %></h4>
       <h5><%= @transaction.paid ? "Paid" : "#{link_to "<i class='fa-solid fa-square-check'></i> Mark as paid".html_safe, edit_transaction_path(@transaction), class: "no-decoration" }".html_safe %></h5>
     </div>
     <div id="baskets">
       <% @baskets.each do |basket| %>
         <div class="basket-card">
-          <% item = Item.find(basket[:item_id]) %>
-          <% if basket[:promotion_id] > 0 && basket[:quantity] >= Promotion.find(basket[:promotion_id]).min_quantity %>
-            <% price = Promotion.find(basket[:promotion_id]).promo_price %>
-          <% else %>
-            <% price = item.price %>
-          <% end %>
-          <div class="card-left">
-            <p><%= item.name %></p>
-            <p>€<%= price %></p>
+          <div class="basket-infos">
+            <% item = Item.find(basket[:item_id]) %>
+            <% promotion = Promotion.find(basket[:promotion_id]) if basket[:promotion_id] > 0 %>
+            <% if basket[:promotion_id] > 0 && basket[:quantity] >= promotion.min_quantity &&  promotion.kind == "bulk" %>
+              <% price = Promotion.find(basket[:promotion_id]).promo_price %>
+            <% else %>
+              <% price = item.price %>
+            <% end %>
+            <div class="card-left">
+              <p><%= item.name %></p>
+              <p><%= "<s>€#{item.price}</s> ".html_safe if promotion && item.price != price %>€<%= price %></p>
+            </div>
+            <div class="card-right">
+              <p>Amt: <strong><%= basket[:quantity] %></strong></p>
+              <% subtotal = price * basket[:quantity] %>
+              <% subtotal = price * basket[:quantity] / 2 if promotion && promotion.kind == "bogo" %>
+              <p><strong>€<%= '%.2f' % subtotal %></strong></p>
+            </div>
           </div>
-          <div class="card-right">
-            <p>Amt: <strong><%= basket[:quantity] %></strong></p>
-            <p><strong>€<%= basket[:quantity] * price %></strong></p>
-          </div>
+          <div class="basket-infos">
+            <% unless promotion.nil?%>
+              <div class="hover-container">
+                <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
+                <aside class="hover-popup">
+                  <h5><%= link_to promotion.name, promotion_path(promotion) %></h5>
+                  <% if promotion.kind == "bogo" %>
+                    <p><strong>Buy 1 Get 1</strong></p>
+                  <% else %>
+                    <p>€<s><%= item.price %></s> €<strong id="promotion-price"><%= promotion.promo_price %></strong></p>
+                  <% end %>
+                  <p><strong id="promotion-minimum"><%= promotion.min_quantity %></strong> minimum</p>
+                </aside>
+              </div>
+            <% end %>
+            </div>
         </div>
       <% end %>
     </div>
   <% else %>
     <h1>Invalid Transaction</h1>
+    <h3><%= link_to "<i class='fa-solid fa-backward'></i>".html_safe, transactions_path %></h3>
     <p>It looks like this isn't your transaction!</p>
     <p>Please go to <%= link_to "your transactions", transactions_path %></p>
   <% end %>
