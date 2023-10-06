@@ -1,7 +1,7 @@
 <div class="container">
   <h1 id="promotion-show"><%= @item.name %></h1>
   <h3><%= link_to "<i class='fa-solid fa-backward'></i>".html_safe, items_path %></h3>
-  <div class="item-show-card" data-controller="items-show">
+  <div class="item-show-card">
     <%= "<img class='item-show' src='#{@item.photo}'>".html_safe %>
     <div class="item-infos">
       <strong><%= @item.category.titleize %></strong>
@@ -12,9 +12,9 @@
               <aside class="hover-popup-cart">
                 <h5><%= promotion.name %></h5>
                 <% if promotion.kind == "bogo" %>
-                  <p><strong><%= promotion.discount.to_i %></strong>% off</p>
+                  <p><strong>Buy 1 Get 1</strong></p>
                 <% else %>
-                  <p>Now: €<strong><%= promotion.promo_price %></strong></p>
+                  <p>€<s><%= @item.price %></s> €<strong><%= promotion.promo_price %></strong></p>
                 <% end %>
                 <p>Minimum: <strong><%= promotion.min_quantity %></strong></p>
               </aside>

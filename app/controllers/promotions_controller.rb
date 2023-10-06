@@ -43,7 +43,7 @@ class PromotionsController < ApplicationController
   def update
     @promotion = Promotion.find(params[:id])
     if @promotion.update(promotion_params)
-      redirect_back(fallback_location: promotions_path)
+      redirect_to promotion_path(@promotion)
     else
       redirect_to new_promotion_path(@promotion), status: :unprocessable_entity
     end

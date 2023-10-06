@@ -51,19 +51,25 @@ export default class extends Controller {
         let itemName = item.querySelector("#item-name").innerText;
         let itemID = parseInt(item.querySelector("#item-id-hidden").innerText);
         let itemPrice = item.querySelector("#item-price").innerText;
-
+        // Promo info
+        let minQuantity = item.querySelector("#promotion-minimum-hidden").innerText;
+        let salePrice = item.querySelector("#promotion-price-hidden").innerText;
+        let promoID = parseInt(item.querySelector("#promotion-id-hidden").innerText);
+        let itemPromo = {id: promoID, newPrice: parseFloat(salePrice), minimum: parseInt(minQuantity)};
         //remove euro sign (will need to work with other currencies in future?)
         let currencySign = itemPrice[0];
         itemPrice = parseFloat(itemPrice.substring(1));
-        console.log(itemPrice);
 
         // Add to cart on click
         if (amount > 0) {
           //check for duplicate items
-          cartItems = consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice);
+          cartItems = consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice, promoID);
           itemsLocation.innerText = "";
           subTotal = 0.0;
           cartItems.forEach((cartItem) => {
+            if (parseInt(cartItem["id"]) === itemPromo["id"] && itemPromo["minimum"] <= parseInt(cartItem["quantity"])) {
+              cartItem["price"] = itemPromo["newPrice"];
+            }
             itemsLocation.insertAdjacentHTML("beforeend", `<div class="cart-item">
               <p id="cart-amount"><strong>${cartItem["quantity"]}</strong></p>
               <p id="cart-name">${cartItem["name"]}</p>
@@ -73,20 +79,35 @@ export default class extends Controller {
           });
           //Animate cart plus icon
           animate(item.querySelector(".fa-cart-plus"));
-          // Create basket item in DB
-          item.querySelector("#basket_item_id").value = itemID;
-          item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id-hidden").innerText;
-          item.querySelector("#basket_quantity").value = amount;
-          console.log(item.querySelector("#basket_promotion_id"));
-          item.querySelector("#basket_promotion_id").value = item.querySelector(".promotion-hidden").innerText;
-          item.querySelector(".basket-submit").click();
         }
         // push subtotal display
         printSubTotal(subTotal, currencySign);
+        console.log(cartItems);
+        createBaskets(document.querySelector(".fa-credit-card"), cartItems, items);
       });
     });
+    // Create baskets on CHECKOUT click
 
-    function consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice) {
+    function createBaskets(payIcon, cartItems, items) {
+      payIcon.addEventListener("click", function() {
+        items.forEach((item) => {
+          let itemID = parseInt(item.querySelector("#item-id-hidden").innerText);
+          cartItems.forEach((cartItem) => {
+            let cartItemID = cartItem["id"];
+            if (itemID === cartItemID) {
+              console.log("hi");
+              item.querySelector("#basket_item_id").value = itemID;
+              item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id-hidden").innerText;
+              item.querySelector("#basket_quantity").value = cartItem["quantity"];
+              item.querySelector("#basket_promotion_id").value = cartItem["promoID"];
+              item.querySelector(".basket-submit").click();
+            }
+          });
+        });
+      });
+    }
+
+    function consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice, promoID) {
       let unique = true;
       cartItems.forEach((cartItem) => {
         if (cartItem["id"] === itemID) {
@@ -101,7 +122,7 @@ export default class extends Controller {
         });
       }
       if (cartItems.length < 1 || unique) {
-        cartItems.push({quantity: amount, id: itemID, name: itemName, price: itemPrice});
+        cartItems.push({quantity: amount, id: itemID, name: itemName, price: itemPrice, promoID: promoID});
       }
       return cartItems;
     }

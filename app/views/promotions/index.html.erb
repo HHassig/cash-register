@@ -21,9 +21,9 @@
         </div>
         <div class="promo-infos">
           <% if promotion.kind == "bogo" %>
-            <p><strong><%= promotion.discount.to_i %></strong>% off</p>
+            <p><strong>Buy 1 Get 1</strong></p>
           <% else %>
-            <p>Now: €<strong><%= promotion.promo_price %></strong></p>
+            <p>€<s><%= item.price %></s> €<strong><%= promotion.promo_price %></strong></p>
           <% end %>
           <p><strong><%= promotion.min_quantity %></strong> minimum</p>
         </div>

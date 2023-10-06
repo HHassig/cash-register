@@ -47,19 +47,24 @@
           <% unless promotion.nil?%>
             <div class="hover-container">
               <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
-              <aside class="hover-popup-cart">
+              <aside class="hover-popup">
                 <h5><%= link_to promotion.name, promotion_path(promotion) %></h5>
                 <% if promotion.kind == "bogo" %>
-                  <p><strong><%= promotion.discount.to_i %></strong>% off</p>
+                  <p><strong>Buy 1 Get 1</strong></p>
                 <% else %>
-                  <p>Now: €<strong><%= promotion.promo_price %></strong></p>
+                  <p>€<s><%= item.price %></s> €<strong id="promotion-price"><%= promotion.promo_price %></strong></p>
                 <% end %>
-                <p><strong><%= promotion.min_quantity %></strong> minimum</p>
+                <p><strong id="promotion-minimum"><%= promotion.min_quantity %></strong> minimum</p>
               </aside>
             </div>
-            <div class="promotion-hidden"><%= promotion.id %></div>
+            <div id="promotion-id-hidden"><%= promotion.id %></div>
+            <div id="promotion-minimum-hidden"><%= promotion.min_quantity %></div>
+            <div id="promotion-price-hidden"><%= promotion.promo_price %></div>
           <% else %>
-            <div class="promotion-hidden">0</div>
+            <div id="promotion-minimum-hidden">0</div>
+            <div id="promotion-id-hidden">0</div>
+            <div id="promotion-price-hidden">0</div>
+
           <% end %>
           <i class="fa-solid fa-cart-plus"></i>
         </div>

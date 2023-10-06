@@ -3,6 +3,21 @@
   <% if @user_id == 0 %>
     <h3>Please sign up or log in to save and view your transaction history</h3>
   <% else %>
-
+    <div class="items">
+      <% @transactions.each do |transaction| %>
+        <div class="item-card">
+          <h3><%= link_to "#{transaction.id}", transaction_path(transaction) %></h3>
+          <div class="transaction-infos">
+            <h6>Savings: <%= transaction.savings.nil? ? "€0.00" : "€#{'%.2f' % transaction.savings}" %></h6>
+          </div>
+          <div class="transaction-infos">
+            <h4>Total: <%= "€#{'%.2f' % transaction.subtotal}" unless transaction.subtotal.nil? %></h4>
+          </div>
+          <div class="transaction-infos">
+            <h4><%= transaction.paid ? "Paid" : "Unpaid" %></h4>
+          </div>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 </div>
