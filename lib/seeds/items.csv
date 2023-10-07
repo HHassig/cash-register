@@ -1,9 +1,5 @@
 GR1,Lipton Green Tea,Green tea is a type of tea that is made from Camellia sinensis leaves and buds that have not undergone the same withering and oxidation process which is used to make oolong teas and black teas.,Lipton,EUR,3.11,teas,712,https://i.imgur.com/5v38t1p.png
-GR2,Forte Green Tea,Green tea originated in China and has since spread to other countries in East Asia.,Forte,EUR,3.49,teas,922,https://i.imgur.com/9YUNUz9.jpg
-GR3,David Green Tea,"Green tea is typically green, yellow or light brown in color, and its flavor profile can range from grass-like and toasted (pan fired) to vegetal, sweet and seaweed-like (steamed).",David,EUR,4.99,teas,77,https://i.imgur.com/VrCxMuF.png
-CF1,Arabica Coffee,A species of flowering plant in the coffee and madder family Rubiaceae.,Carte Noire,EUR,6.49,coffees,596,https://i.imgur.com/cnbp06x.png
-CF2,Robusta Coffee,A species of coffee that has its origins in central and western sub-Saharan Africa. It is a species of flowering plant in the family Rubiaceae.,Carte Noire,EUR,7.99,coffees,462,https://i.imgur.com/KmE8q0g.png
-CF3,Decaf Coffee,"Decaffeination is the removal (""de-"") of caffeine from coffee beans, cocoa, tea leaves, and other caffeine-containing materials.",Carte Noire,EUR,4.99,coffees,74,https://i.imgur.com/T3rnPlq.png
+CF1,Coffee,A species of flowering plant in the coffee and madder family Rubiaceae.,Carte Noire,EUR,11.23,coffees,596,https://i.imgur.com/cnbp06x.png
 SR1,Strawberries,"The garden strawberry (or simply strawberry; Fragaria × ananassa) is a widely grown hybrid species of the genus Fragaria, collectively known as the strawberries, which are cultivated worldwide for their fruit.",Camarillo,EUR,5.00,fruits,77,https://i.imgur.com/rkiIiG9.png
 SR2,Organic Strawberries,"The fruit is widely appreciated for its characteristic aroma, bright red color, juicy texture, and sweetness.",Camarillo,EUR,7.5,fruits,839,https://i.imgur.com/JU4C1Y2.png
 BA1,Bananas,"Bananas are elongated, edible fruits produced by several kinds of large herbaceous flowering plants in the genus Musa.",Danon,EUR,1.49,fruits,244,https://i.imgur.com/kvci3f1.png

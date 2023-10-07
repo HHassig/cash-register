@@ -20,10 +20,14 @@ class PromotionsController < ApplicationController
   def create
     @promotion = Promotion.new(promotion_params)
     # New promotion defaulted to active
+    @promotion.original_price = Item.find(@promotion.item_id).price
     @promotion.active = true
+    if @promotion.promo_price.nil? && !@promotion.discount.nil?
+      @promotion.promo_price = (@promotion.original_price * @promotion.discount).round(2)
+    end
     # Set buy one get one discount to 50%
     if @promotion.kind == "bogo"
-      @promotion.promo_price = Item.find(@promotion.item_id).price / 2
+      @promotion.promo_price = @promotion.original_price / 2
       @promotion.min_quantity = 2
     end
     if @promotion.save
@@ -58,6 +62,6 @@ class PromotionsController < ApplicationController
   private
 
   def promotion_params
-    params.require(:promotion).permit(:name, :kind, :item_id, :min_quantity, :discount, :active, :promo_price)
+    params.require(:promotion).permit(:name, :kind, :item_id, :min_quantity, :discount, :active, :promo_price, :original_price)
   end
 end

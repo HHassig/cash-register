@@ -5,23 +5,28 @@ export default class extends Controller {
   connect() {
     const promotions = document.querySelectorAll(".item-card");
     const categoriesHTML = document.querySelectorAll("#category");
+
     //set "all" font-size on load
     categoriesHTML[0].style["font-size"] = "1.5em";
-    //array of all menu options
-    let categories = [];
-    categoriesHTML.forEach((category) => {
-      categories.push(category.innerText);
-    });
+
+    //show default category
     displayCategory(categoriesHTML[0], promotions);
+
+    // Listen for a click on each category and act
     categoriesHTML.forEach((category) => {
       category.addEventListener("click", function() {
+        //reset by displaying all promotions
         displayAll(promotions);
         resetCategories(categoriesHTML);
+
+        // Change style of selected category
         category.style["background-color"] = "white";
         category.style["border-radius"] = "1em";
         category.style["padding"] = "0.5em";
         category.style["font-weight"] = "bold";
         category.style["font-size"] = "1.5em";
+
+        // Toggle visibility of each card
         displayCategory(category, promotions);
       });
     });

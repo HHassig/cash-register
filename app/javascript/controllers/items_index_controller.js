@@ -3,35 +3,21 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="items-index"
 export default class extends Controller {
   connect() {
+    // Get all categories and set listeners
+    categories(document.querySelectorAll("#category"));
+
+    // Iterate over each item and do all the math
+    // itemIteration(items, cart, 0.0, cartItems);
     const items = document.querySelectorAll(".item-card");
     const cart = document.querySelector(".hover-popup-cart");
     let subTotal = 0.0;
-    let categories = [];
-    let categoriesHTML = document.querySelectorAll("#category");
-    //set "all" font-size on load
-    categoriesHTML[0].style["font-size"] = "1.5em";
-    categoriesHTML.forEach((category) => {
-      categories.push(category.innerText);
-    });
-    categoriesHTML.forEach((category) => {
-      category.addEventListener("click", function() {
-        displayAll(items);
-        resetCategories(categoriesHTML);
-        category.style["background-color"] = "white";
-        category.style["border-radius"] = "1em";
-        category.style["padding"] = "0.5em";
-        category.style["font-weight"] = "bold";
-        category.style["font-size"] = "1.5em";
-        displayCategory(category, items);
-      });
-    });
-
     let cartItems = getOldItems(document.querySelectorAll(".cart-item"));
     // Change value in text field in accordance with "+" or "-"
     items.forEach((item) => {
       let amount = parseInt(item.querySelector(".amount-js").value);
       let plus = item.querySelector(".fa-circle-plus");
       let minus = item.querySelector(".fa-circle-minus");
+      // Get item quantities to add
       plus.addEventListener("click", function() {
         amount += 1;
         item.querySelector(".amount-js").value = amount;
@@ -60,7 +46,6 @@ export default class extends Controller {
         let salePrice = parseFloat(item.querySelector("#promotion-price").innerText);
         let promoID = parseInt(item.querySelector("#promotion-id").innerText);
         let itemPromo = {id: promoID, newPrice: salePrice, minimum: minQuantity, kind: promoKind, itemID: itemID};
-        console.log(amount);
         if (itemPromo["kind"] === "bogo") {
           amount *= 2;
           itemPrice /= 2;
@@ -74,11 +59,9 @@ export default class extends Controller {
           itemsLocation.innerText = "";
           subTotal = 0.0;
           cartItems.forEach((cartItem) => {
-            console.log(cartItem);
-            let basketTotal = cartItem["totalPrice"];
+            let basketTotal = cartItem["quantity"] * cartItem["price"];
             // Check for Promos!
             if (parseInt(cartItem["id"]) === itemPromo["itemID"] && itemPromo["minimum"] <= parseInt(cartItem["quantity"]) && itemPromo["kind"] == "bulk") {
-              console.log("hi");
               cartItem["price"] = itemPromo["newPrice"];
               basketTotal = cartItem["quantity"] * cartItem["price"];
             }
@@ -103,6 +86,31 @@ export default class extends Controller {
         printSubTotal(subTotal, currencySign);
       });
     });
+
+
+
+
+
+    //
+    // Functions
+    //
+
+    function categories(categoriesHTML) {
+      //Set "all" font-size on load
+      categoriesHTML[0].style["font-size"] = "1.5em";
+      categoriesHTML.forEach((category) => {
+        category.addEventListener("click", function() {
+          displayAll(items);
+          resetCategories(categoriesHTML);
+          category.style["background-color"] = "white";
+          category.style["border-radius"] = "1em";
+          category.style["padding"] = "0.5em";
+          category.style["font-weight"] = "bold";
+          category.style["font-size"] = "1.5em";
+          displayCategory(category, items);
+        });
+      });
+    }
 
     function getOldItems(oldCart) {
       let cartItems = []
@@ -150,7 +158,6 @@ export default class extends Controller {
       } else {
         cartItems.push({quantity: amount, id: itemID, name: itemName, price: itemPrice, promoID: promoID, totalPrice: totalPrice});
       }
-      console.log(cartItems);
       return cartItems;
     }
     function printSubTotal(subTotal, currencySign) {

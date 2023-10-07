@@ -1,13 +1,14 @@
 <div class="container">
   <h1>Edit "<%= @promotion.name %>"</h1>
   <% if current_user && @user.admin? %>
-    <div class="new-promotion-form">
+    <div class="new-promotion-form" data-controller="promotion-new">
       <%= simple_form_for(@promotion) do |f| %>
         <%= f.input :kind, as: :radio_buttons, collection: @kinds %>
         <%= f.input :item_id, collection: @items %>
         <%= f.input :name %>
-        <%= f.input :min_quantity, label: "Min quantity; N/A for 'bogo'" %>
-        <%= f.input :promo_price, label: "New Price; N/A for 'bogo'" %>
+        <%= f.input :min_quantity %>
+        <%= f.input :promo_price %>
+        <%= f.input :discount %>
         <%= f.submit %>
       <% end %>
     </div>
