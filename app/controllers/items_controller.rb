@@ -16,7 +16,22 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
+  def new
+    @user = current_user
+    @item = Item.new
+  end
+
+  def create
+    @item = Item.new(item_params)
+    if @item.save
+      redirect_to item_path(@item), notice: 'Item was successfully created.'
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
   def edit
+    @user = current_user
     @item = Item.find(params[:id])
   end
 

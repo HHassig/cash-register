@@ -1,0 +1,20 @@
+<div class="container">
+  <h1>New Item</h1>
+  <% if current_user && @user.admin? %>
+    <div class="new-promotion-form">
+      <%= simple_form_for(@item) do |f| %>
+        <%= f.input :name %>
+        <%= f.input :currency %>
+        <%= f.input :price %>
+        <%= f.input :description %>
+        <%= f.input :inventory_remaining %>
+        <%= f.input :category %>
+        <%= f.input :brand %>
+        <%= f.input :photo, label: "Photo url:" %>
+        <%= f.submit %>
+      <% end %>
+    </div>
+  <% else %>
+    <h3>Insufficient privileges.</h3>
+  <% end %>
+</div>
