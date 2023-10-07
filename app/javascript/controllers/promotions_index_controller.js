@@ -45,7 +45,7 @@ export default class extends Controller {
     function displayCategory(category, promotions) {
       promotions.forEach((promotion) => {
         // hide cards that arent the same category as selected
-        if (promotion.querySelector("#category-hidden").innerText !== category.innerText) {
+        if (promotion.querySelector("#category-sorter").innerText !== category.innerText) {
           promotion.style.display = "none";
         }
         if (category.innerText == "All") {

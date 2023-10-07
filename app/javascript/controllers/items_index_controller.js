@@ -50,19 +50,17 @@ export default class extends Controller {
         // Get item info from rails into JS
         let itemsLocation = cart.querySelector(".cart-items")
         let itemName = item.querySelector("#item-name").innerText;
-        let itemID = parseInt(item.querySelector("#item-id-hidden").innerText);
+        let itemID = parseInt(item.querySelector("#item-id").innerText);
         let itemPrice = item.querySelector("#item-price").innerText;
         // Promo info
-        let promoKind = item.querySelector("#promotion-kind-hidden").innerText;
-        let minQuantity = parseInt(item.querySelector("#promotion-minimum-hidden").innerText);
-        let salePrice = parseFloat(item.querySelector("#promotion-price-hidden").innerText);
-        let promoID = parseInt(item.querySelector("#promotion-id-hidden").innerText);
+        let promoKind = item.querySelector("#promotion-kind").innerText;
+        let minQuantity = parseInt(item.querySelector("#promotion-minimum").innerText);
+        let salePrice = parseFloat(item.querySelector("#promotion-price").innerText);
+        let promoID = parseInt(item.querySelector("#promotion-id").innerText);
         let itemPromo = {id: promoID, newPrice: salePrice, minimum: minQuantity, kind: promoKind, itemID: itemID};
         //remove euro sign (will need to work with other currencies in future?)
         let currencySign = itemPrice[0];
-        console.log(itemPrice);
         itemPrice = parseFloat(itemPrice.substring(1));
-        console.log(itemPrice);
 
         // Add to cart on click
         if (amount > 0) {
@@ -72,7 +70,7 @@ export default class extends Controller {
           itemsLocation.innerText = "";
           subTotal = 0.0;
           cartItems.forEach((cartItem) => {
-            let basketTotal = cartItem["quantity"] * itemPrice;
+            let basketTotal = cartItem["quantity"] * cartItem["price"];
             if (parseInt(cartItem["id"]) === itemPromo["itemID"] && itemPromo["minimum"] <= parseInt(cartItem["quantity"]) && itemPromo["kind"] == "bulk") {
               cartItem["price"] = itemPromo["newPrice"];
               basketTotal = cartItem["quantity"] * cartItem["price"];
@@ -80,7 +78,7 @@ export default class extends Controller {
             if (parseInt(cartItem["id"]) === itemPromo["itemID"] && itemPromo["kind"] === "bogo") {
               // Add double items and then re-calculate price as "half quantity, same price"
               cartItem["quantity"] += amount;
-              basketTotal = (cartItem["quantity"] / 2) * itemPrice;
+              basketTotal = (cartItem["quantity"] / 2) * cartItem["price"];
               itemPrice /= 2;
             }
             itemsLocation.insertAdjacentHTML("beforeend", `<div class="cart-item">
@@ -90,7 +88,7 @@ export default class extends Controller {
               </div>`);
             subTotal += (basketTotal);
             // console.log(basketTotal);
-            createBasket(cartItem, item, basketTotal, itemPrice, amount);
+            createBasket(cartItem, item, itemPrice, amount);
           });
           //Animate cart plus icon
           animate(item.querySelector(".fa-cart-plus"));
@@ -113,15 +111,15 @@ export default class extends Controller {
       return cartItems;
     }
 
-    function createBasket(cartItem, item, basketTotal, itemPrice, amount) {
-      let itemID = parseInt(item.querySelector("#item-id-hidden").innerText);
+    function createBasket(cartItem, item, itemPrice, amount) {
+      let itemID = parseInt(item.querySelector("#item-id").innerText);
       let cartItemID = cartItem["id"];
       if (itemID == cartItemID) {
-        item.querySelector("#basket_item_id").value = item.querySelector("#item-id-hidden").innerText;
-        item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id-hidden").innerText;
+        item.querySelector("#basket_item_id").value = item.querySelector("#item-id").innerText;
+        item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id").innerText;
         item.querySelector("#basket_quantity").value = amount;
         item.querySelector("#basket_promotion_id").value = cartItem["promoID"];
-        item.querySelector("#basket_subtotal").value = basketTotal;
+        item.querySelector("#basket_subtotal").value = itemPrice * amount;
         item.querySelector("#basket_cost_per_item").value = itemPrice;
         item.querySelector(".basket-submit").click();
       }
@@ -156,7 +154,7 @@ export default class extends Controller {
     function displayCategory(category, items) {
       items.forEach((item) => {
         // hide cards that arent the same category as selected
-        if (item.querySelector("#category-hidden").innerText !== category.innerText) {
+        if (item.querySelector("#category-sorter").innerText !== category.innerText) {
           item.style.display = "none";
         }
         if (category.innerText == "All") {

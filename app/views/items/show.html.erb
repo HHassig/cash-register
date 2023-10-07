@@ -19,9 +19,9 @@
                 <p>Minimum: <strong><%= promotion.min_quantity %></strong></p>
               </aside>
             </div>
-            <div class="promotion-hidden"><%= promotion.id %></div>
+            <div id="promotion-id" class="hidden"><%= promotion.id %></div>
           <% else %>
-            <div class="promotion-hidden">0</div>
+            <div id="promotion-id" class="hidden">0</div>
           <% end %>
       <strong>€<%= '%.2f' % @item.price %></strong>
     </div>
@@ -52,6 +52,6 @@
       <i class="fa-solid fa-cart-plus"></i>
     </div>
     -->
-    <div class="item-id-hidden"><%= @item.id %></div>
+    <div id="item-id" class="hidden"><%= @item.id %></div>
   </div>
 </div>

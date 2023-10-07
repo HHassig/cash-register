@@ -16,8 +16,8 @@
               <p id="cart-name"><%= Item.find(basket.item_id).name %></p>
               <p id="cart-subtotal">€<%= '%.2f' % basket.subtotal %></p>
               <p id="cart-item-price" class="hidden"><%= basket.cost_per_item %></p>
-              <p id="cart-item-id"><%= Item.find(basket.item_id).id %></p>
-              <p id="cart-promo-id"><%= basket.promotion_id %></p>
+              <p id="cart-item-id" class="hidden"><%= Item.find(basket.item_id).id %></p>
+              <p id="cart-promo-id" class="hidden"><%= basket.promotion_id %></p>
             </div>
           <% end %>
         </div>
@@ -68,22 +68,22 @@
                 <p><strong id="promotion-minimum"><%= promotion.min_quantity %></strong> minimum</p>
               </aside>
             </div>
-            <div id="promotion-id-hidden"><%= promotion.id %></div>
-            <div id="promotion-minimum-hidden"><%= promotion.min_quantity %></div>
-            <div id="promotion-price-hidden"><%= promotion.promo_price %></div>
-            <div id="promotion-kind-hidden"><%= promotion.kind %></div>
+            <div id="promotion-id" class="hidden"><%= promotion.id %></div>
+            <div id="promotion-minimum" class="hidden"><%= promotion.min_quantity %></div>
+            <div id="promotion-price" class="hidden"><%= promotion.promo_price %></div>
+            <div id="promotion-kind" class="hidden"><%= promotion.kind %></div>
           <% else %>
-            <div id="promotion-minimum-hidden">0</div>
-            <div id="promotion-kind-hidden">none</div>
-            <div id="promotion-id-hidden">0</div>
-            <div id="promotion-price-hidden">0</div>
+            <div id="promotion-minimum" class="hidden">0</div>
+            <div id="promotion-kind" class="hidden">none</div>
+            <div id="promotion-id" class="hidden">0</div>
+            <div id="promotion-price" class="hidden">0</div>
           <% end %>
           <i class="fa-solid fa-cart-plus"></i>
         </div>
-        <div id="category-hidden"><%= item.category.titleize %></div>
-        <div id="item-id-hidden"><%= item.id %></div>
-        <div id="transaction-id-hidden"><%= @transaction.id %></div>
-        <%= simple_form_for @basket, :html => { class: "basket-form-hidden" } do |f| %>
+        <div id="category-sorter" class="hidden"><%= item.category.titleize %></div>
+        <div id="item-id" class="hidden"><%= item.id %></div>
+        <div id="transaction-id" class="hidden"><%= @transaction.id %></div>
+        <%= simple_form_for @basket, :html => { class: "hidden" } do |f| %>
           <%= f.input :item_id, class: "basket-item-id" %>
           <%= f.input :transaction_id, class: "basket-transaction-id" %>
           <%= f.input :quantity, class: "basket-quantity" %>
