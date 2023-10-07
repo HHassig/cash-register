@@ -9,8 +9,8 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.find(params[:id])
     # @baskets = condense_baskets(Basket.where(transaction_id: @transaction.id))
     @baskets = Basket.where(transaction_id: @transaction.id)
-    @transaction.subtotal = get_subtotal(@baskets)
     @transaction.savings = get_savings(@baskets)
+    @transaction.subtotal = get_subtotal(@baskets) - @transaction.savings
     @transaction.save!
   end
 
@@ -56,8 +56,8 @@ class TransactionsController < ApplicationController
         id: temp[0].id,
         quantity: quantity }
     end
-    raise
     condensed
+    raise
   end
 
   def get_subtotal(baskets)
