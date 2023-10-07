@@ -12,12 +12,22 @@
         <div class="cart-items">
           <% total = 0 %>
           <% @baskets.each do |basket| %>
-            <% total += basket[:subtotal] %>
+            <% promotion = Promotion.find(basket[:promotion_id]) if basket[:promotion_id].positive? %>
+            <% if promotion %>
+              <% subtotal = basket[:quantity] * promotion.promo_price %>
+            <% else %>
+              <% subtotal = basket[:quantity] * basket[:cost_per_item] %>
+            <% end %>
+            <% total += subtotal %>
             <div class="cart-item">
               <p id="cart-amount"><strong><%= basket[:quantity] %></strong></p>
               <p id="cart-name"><%= Item.find(basket[:item_id]).name %></p>
-              <p id="cart-subtotal">€<%= '%.2f' % basket[:subtotal] %></p>
-              <p id="cart-item-price" class="hidden"><%= basket[:cost_per_item] %></p>
+              <p id="cart-subtotal">€<%= '%.2f' % subtotal %></p>
+              <% if basket[:promotion_id].positive? and basket[:quantity] >= Promotion.find(basket[:promotion_id]).min_quantity %>
+                <p id="cart-item-price" class="hidden"><%= Promotion.find(basket[:promotion_id]).promo_price %></p>
+              <% else %>
+                <p id="cart-item-price" class="hidden"><%= basket[:cost_per_item] %></p>
+              <% end %>
               <p id="cart-item-id" class="hidden"><%= Item.find(basket[:item_id]).id %></p>
               <p id="cart-promo-id" class="hidden"><%= basket[:promotion_id] %></p>
             </div>

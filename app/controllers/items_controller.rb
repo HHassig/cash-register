@@ -6,7 +6,6 @@ class ItemsController < ApplicationController
     @transaction = Transaction.create(user_id: 0) unless current_user
     @transaction = find_unpaid_transaction(current_user.id).first if current_user
     @transaction = Transaction.create(user_id: current_user.id) if current_user && @transaction.nil?
-    # @baskets = Basket.where(transaction_id: @transaction.id)
     @baskets = condense_baskets(Basket.where(transaction_id: @transaction.id))
     @basket = Basket.new
     @user = current_user ? current_user : "guest"
@@ -73,7 +72,6 @@ class ItemsController < ApplicationController
         subtotal: subtotal,
         cost_per_item: baskets[oldIndex[0]][:cost_per_item] }
     end
-    # raise
     condensed
   end
 end

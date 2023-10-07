@@ -50,15 +50,21 @@ export default class extends Controller {
         let itemName = item.querySelector("#item-name").innerText;
         let itemID = parseInt(item.querySelector("#item-id").innerText);
         let itemPrice = item.querySelector("#item-price").innerText;
+        //remove euro sign (will need to work with other currencies in future?)
+        let currencySign = itemPrice[0];
+        itemPrice = parseFloat(itemPrice.substring(1));
+
         // Promo info
         let promoKind = item.querySelector("#promotion-kind").innerText;
         let minQuantity = parseInt(item.querySelector("#promotion-minimum").innerText);
         let salePrice = parseFloat(item.querySelector("#promotion-price").innerText);
         let promoID = parseInt(item.querySelector("#promotion-id").innerText);
         let itemPromo = {id: promoID, newPrice: salePrice, minimum: minQuantity, kind: promoKind, itemID: itemID};
-        //remove euro sign (will need to work with other currencies in future?)
-        let currencySign = itemPrice[0];
-        itemPrice = parseFloat(itemPrice.substring(1));
+        console.log(amount);
+        if (itemPromo["kind"] === "bogo") {
+          amount *= 2;
+          itemPrice /= 2;
+        }
 
         // Add to cart on click
         if (amount > 0) {
@@ -68,14 +74,27 @@ export default class extends Controller {
           itemsLocation.innerText = "";
           subTotal = 0.0;
           cartItems.forEach((cartItem) => {
+            console.log(cartItem);
             let basketTotal = cartItem["totalPrice"];
+            // Check for Promos!
+            if (parseInt(cartItem["id"]) === itemPromo["itemID"] && itemPromo["minimum"] <= parseInt(cartItem["quantity"]) && itemPromo["kind"] == "bulk") {
+              console.log("hi");
+              cartItem["price"] = itemPromo["newPrice"];
+              basketTotal = cartItem["quantity"] * cartItem["price"];
+            }
+
             itemsLocation.insertAdjacentHTML("beforeend", `<div class="cart-item">
               <p id="cart-amount"><strong>${cartItem["quantity"]}</strong></p>
               <p id="cart-name">${cartItem["name"]}</p>
               <p id="cart-subtotal">${currencySign}${(parseFloat(basketTotal).toFixed(2))}</p>
               </div>`);
             subTotal += (basketTotal);
-            createBasket(cartItem, item, itemPrice);
+            createBasket(cartItem, item, itemPrice, amount);
+            if (parseInt(cartItem["id"]) === itemPromo["itemID"] && itemPromo["kind"] === "bogo") {
+              // Add double items and then re-calculate price as "half quantity, same price"
+              amount /= 2;
+              itemPrice *= 2;
+            }
           });
           //Animate cart plus icon
           animate(item.querySelector(".fa-cart-plus"));
@@ -88,7 +107,6 @@ export default class extends Controller {
     function getOldItems(oldCart) {
       let cartItems = []
       oldCart.forEach((oldItem) => {
-        console.log(oldItem);
         let amount = parseInt(oldItem.querySelector("#cart-amount").innerText);
         let itemID = parseInt(oldItem.querySelector("#cart-item-id").innerText);
         let itemName = oldItem.querySelector("#cart-name").innerText;
@@ -101,15 +119,13 @@ export default class extends Controller {
       return cartItems;
     }
 
-    function createBasket(cartItem, item, itemPrice) {
+    function createBasket(cartItem, item, itemPrice, amount) {
       let itemID = parseInt(item.querySelector("#item-id").innerText);
-      console.log(cartItem);
       let cartItemID = cartItem["id"];
       if (itemID == cartItemID) {
-        console.log(itemPrice);
         item.querySelector("#basket_item_id").value = item.querySelector("#item-id").innerText;
         item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id").innerText;
-        item.querySelector("#basket_quantity").value = cartItem["quantity"];
+        item.querySelector("#basket_quantity").value = amount;
         item.querySelector("#basket_promotion_id").value = cartItem["promoID"];
         item.querySelector("#basket_subtotal").value = cartItem["price"] * cartItem["quantity"];
         item.querySelector("#basket_cost_per_item").value = itemPrice;
