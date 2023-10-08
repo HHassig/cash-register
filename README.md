@@ -47,13 +47,13 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<center><img src="https://i.imgur.com/5lQhjEs.png" alt="Logo" width="50%"></center>
+<p align="center"><img src="https://i.imgur.com/5lQhjEs.png" alt="Logo" width="50%"></p>
 <br />
-This cash register was built using Ruby on Rails after a 9-week web development bootcamp as part of a job application
+This cash register was built using Ruby on Rails after a 9-week web development bootcamp as part of a job application.
 
 #### Some features:
 - A **guest** can create and pay a transaction but will be unable to see history
-- A **user** can be an administrartor or not
+- A **user** can be an administrator or not
 - A **user** can add select the amount of items desired and add to cart
 - A **user** can hover and see their cart (items, price, subtotal), and see current promos on the items index page
 - A **user** can navigate to "promotions" (all, active, expired), as well as transaction history and individual transactions
@@ -61,9 +61,8 @@ This cash register was built using Ruby on Rails after a 9-week web development 
 - A **user's** cart is simply the last unpaid transaction of that user
 - An **administrator** can create new promotions, edit promotion information, and toggle promotions between active/inactive
 - An **administrator** can edit, unlist, and create an item for sale
+- An **administrator** cannot destroy a promotion or item as it would not make sense to track transaction history and not have references to past inventory and promotions
 
-
-<!-- Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description` -->
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -115,7 +114,7 @@ This cash register was built using Ruby on Rails after a 9-week web development 
    bin/rails s
    ```
 5. Open <a href="http://localhost:3000" target="_blank">localhost:3000</a> in your browser
-6. Login info:
+6. Login info (no need for tight security for a demo):
   - admin@test.com
   - 123456
 
@@ -135,11 +134,11 @@ This cash register was built using Ruby on Rails after a 9-week web development 
     - The link between the two allows the transaction model to be created and added to as the user desires, until marked as "paid"
   - Item info and promotion info pop-up on hover and are also available in the individual view pages
   - A piggy bank icon appears on an item card if there is an active promotion on said item, providing the user with relevant information
-  - Select how many items are desired and click the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/f0c25837a3fe0e03783b939559e088abcbfb3c4b/svgs/solid/cart-plus.svg" width="20" height="20" color="purple"> icon
+  - Select how many items are desired and click the <img src="https://i.imgur.com/0bIItu9.png" width="20" height="20" fill="purple"> icon
   - To check out:
-    - Hover over the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/f0c25837a3fe0e03783b939559e088abcbfb3c4b/svgs/solid/cart-shopping.svg" width="20" height="20" color="purple"> icon in the top right corner
-    - Click the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/f0c25837a3fe0e03783b939559e088abcbfb3c4b/svgs/solid/credit-card.svg" width="20" height="20" color="purple"> icon to begin the checkout process
-    - Your cart will exist in this state on the root page until this transaction is marked as "paid
+    - Hover over the <img src="https://i.imgur.com/WXMK23M.png" width="20" height="20" fill="purple"> icon in the top right corner
+    - Click the <img src="https://i.imgur.com/SqAbOLu.png" height="20"> icon to begin the checkout process
+    - Your cart will exist in this state on the <a href="https://hassig-cash-register.fly.dev">root page</a> until this transaction is marked as "paid
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -147,13 +146,13 @@ This cash register was built using Ruby on Rails after a 9-week web development 
 ## Showcase
 
 ### Show/Hide Categories
-<center><img src="https://fittechtravel.com/cash-register/categories.gif" width="80%"></center>
+<center><img src="https://raw.githubusercontent.com/HHassig/gif-hosting-cash-register/master/categories.gif" width="80%"></center>
 
 ### Complete Checkout
-<center><img src="https://fittechtravel.com/cash-register/full.gif" width="80%"></center>
+<center><img src="https://raw.githubusercontent.com/HHassig/gif-hosting-cash-register/master/full.gif" width="80%"></center>
 
 ### Promotion New/Sort
-<center><img src="https://fittechtravel.com/cash-register/promotions.gif" width="80%"></center>
+<center><img src="https://raw.githubusercontent.com/HHassig/gif-hosting-cash-register/master/promotions.gif" width="80%"></center>
 
 <!-- Limitations -->
 ## Limitations
@@ -170,6 +169,11 @@ This cash register was built using Ruby on Rails after a 9-week web development 
   - If a **user** knows of the promo and desired amount, **user** has to submit half the amount, which is an easy error to make and not **user** friendly
   - Since a **user** cannot edit the cart, this is an issue
 - As the inventory grows, the ability to search for an both items and promotions will be necessary
+- Images should be hosted on a proper image service that links better to rails, such as cloudinary
+    -It is easier to upload the photo file itself rather than a URL to the image
+- A **user's** unpaid cart does not get recalculated if a **promotion** is added or activated during the transaction
+- An **item** cannot be added to a cart on any page except items/index
+  - It would make sense to add an item to cart from the items/show page (low-hanging fruit for later)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -181,6 +185,9 @@ This cash register was built using Ruby on Rails after a 9-week web development 
   * At timesitems_index_controller.js was a mess of variables and flow that is unreadable to others
   * Simpler code, better comments, consistent names (and less variables)
 * Practice makes perfect
+* This was my first introduction to TDD and first time seriously using rspec
+  * I think I did a good job given the constraints and definitely want to utilize this practice going forward
+  * Measure twice, cut once!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

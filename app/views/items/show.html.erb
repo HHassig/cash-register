@@ -1,57 +1,38 @@
 <div class="container">
-  <h1 id="promotion-show"><%= @item.name %></h1>
+  <h1><%= @item.name %></h1>
   <h3><%= link_to "<i class='fa-solid fa-backward'></i>".html_safe, items_path %></h3>
   <div class="item-show-card">
     <%= "<img class='item-show' src='#{@item.photo}'>".html_safe %>
     <div class="item-infos">
       <strong><%= @item.category.titleize %></strong>
       <% promotion = Promotion.find_by(item_id: @item.id, active: true) %>
-          <% unless promotion.nil? %>
-            <div class="hover-container">
-              <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
-              <aside class="hover-popup-cart">
-                <h5><%= promotion.name %></h5>
-                <% if promotion.kind == "bogo" %>
-                  <p><strong>Buy 1 Get 1</strong></p>
-                <% else %>
-                  <p>€<s><%= @item.price %></s> €<strong><%= promotion.promo_price %></strong></p>
-                <% end %>
-                <p>Minimum: <strong><%= promotion.min_quantity %></strong></p>
-              </aside>
-            </div>
-            <div id="promotion-id" class="hidden"><%= promotion.id %></div>
-          <% else %>
-            <div id="promotion-id" class="hidden">0</div>
-          <% end %>
+      <% unless promotion.nil? %>
+        <div class="hover-container">
+          <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
+          <aside class="hover-popup-cart">
+            <h5><%= promotion.name %></h5>
+            <% if promotion.kind == "bogo" %>
+              <p><strong>Buy 1 Get 1</strong></p>
+            <% else %>
+              <p>€<s><%= @item.price %></s> €<strong><%= promotion.promo_price %></strong></p>
+            <% end %>
+            <p>Minimum: <strong><%= promotion.min_quantity %></strong></p>
+          </aside>
+        </div>
+        <div id="promotion-id" class="hidden"><%= promotion.id %></div>
+      <% else %>
+        <div id="promotion-id" class="hidden">0</div>
+      <% end %>
       <strong>€<%= '%.2f' % @item.price %></strong>
     </div>
     <p><%= @item.description %></p>
     <div class="item-infos">
-      <% if @user != "guest" && @user.admin? %>
+      <% if current_user && current_user.admin? %>
         <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_item_path(@item) %>
       <% end %>
       <% if @item.inventory_remaining < 1 %>
         Sold out!
       <% end %>
     </div>
-    <!--
-    <div class="item-infos">
-      <strong><%= @item.category.titleize %></strong>
-      <div class="add-remove">
-        <i class="fa-solid fa-circle-minus"></i>
-        <input type="text" class="amount-js" value="0">
-        <i class="fa-solid fa-circle-plus"></i>
-      </div>
-    </div>
-    <div class="item-infos">
-      <strong>€<%= '%.2f' % @item.price %></strong>
-      <% promotions = Promotion.where(item_id: @item.id) %>
-      <% unless promotions == [] %>
-        <i class="fa-solid fa-piggy-bank"></i>
-      <% end %>
-      <i class="fa-solid fa-cart-plus"></i>
-    </div>
-    -->
-    <div id="item-id" class="hidden"><%= @item.id %></div>
   </div>
 </div>

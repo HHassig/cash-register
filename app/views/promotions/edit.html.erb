@@ -1,6 +1,6 @@
 <div class="container">
   <h1>Edit "<%= @promotion.name %>"</h1>
-  <% if current_user && @user.admin? %>
+  <% if current_user && current_user.admin? %>
     <div class="new-promotion-form" data-controller="promotion-new">
       <%= simple_form_for(@promotion) do |f| %>
         <%= f.input :kind, as: :radio_buttons, collection: @kinds %>

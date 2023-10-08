@@ -1,6 +1,6 @@
 <div class="container">
 <!-- User_id = 0 is a "guest account", these transactions will not be hidden -->
-  <% if @user_id == @transaction.user_id || @transaction.user_id == 0 %>
+  <% if current_user && (current_user.id == @transaction.user_id || @transaction.user_id == 0) %>
     <h1 id="transaction-h1">Transaction <%= @transaction.id %></h1>
     <h3><%= link_to "<i class='fa-solid fa-backward'></i>".html_safe, transactions_path %></h3>
     <div class="transaction-info">

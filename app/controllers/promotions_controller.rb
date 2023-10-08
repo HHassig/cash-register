@@ -1,44 +1,25 @@
 class PromotionsController < ApplicationController
   def index
     @promotions = Promotion.all
-    @user = current_user
   end
 
   def show
     @promotion = Promotion.find(params[:id])
     @item = Item.find(@promotion.item_id)
-    @user = current_user
   end
 
   def new
-    @user = current_user
+    @promotion = Promotion.new
     @items = Item.all
     @kinds = ["bogo", "bulk"]
-    @promotion = Promotion.new
   end
 
   def create
-    @promotion = Promotion.new(promotion_params)
-    # New promotion defaulted to active
-    @promotion.original_price = Item.find(@promotion.item_id).price
-    @promotion.active = true
-    if @promotion.promo_price.nil? && !@promotion.discount.nil?
-      @promotion.promo_price = (@promotion.original_price * @promotion.discount).round(2)
-    end
-    # Set buy one get one discount to 50%
-    if @promotion.kind == "bogo"
-      @promotion.promo_price = @promotion.original_price / 2
-      @promotion.min_quantity = 2
-    end
-    if @promotion.save
-      redirect_to promotion_path(@promotion), notice: 'Promotion was successfully created.'
-    else
-      render :new, status: :unprocessable_entity
-    end
+    PromotionCreator.new(promotion_params).create_promotion
+    redirect_to promotion_path(Promotion.last), notice: 'Promotion was successfully created.'
   end
 
   def edit
-    @user = current_user
     @promotion = Promotion.find(params[:id])
     @items = Item.all
     @kinds = ["bulk", "bogo"]
@@ -51,12 +32,6 @@ class PromotionsController < ApplicationController
     else
       redirect_to new_promotion_path(@promotion), status: :unprocessable_entity
     end
-  end
-
-  def destroy
-    @promotion = Promotion.find(params[:id])
-    @promotion.destroy!
-    redirect_to promotions_path, notice: 'Promotion was successfully destroyed.', status: :see_other
   end
 
   private

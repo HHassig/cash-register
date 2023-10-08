@@ -1,6 +1,6 @@
 <div class="container" data-controller="promotions-index">
   <h1 id="promotion-show">Promotions</h1>
-  <% if current_user && @user.admin? %>
+  <% if current_user && current_user.admin? %>
     <h4><%= link_to "<i class='fa-solid fa-circle-plus'></i>".html_safe, new_promotion_path %></h4>
   <% end %>
   <div class="categories">
@@ -27,18 +27,17 @@
           <% end %>
           <p><strong><%= promotion.min_quantity %></strong> minimum</p>
         </div>
-        <% if current_user && @user.admin? %>
+        <% if current_user && current_user.admin? %>
           <div class="promo-links">
             <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_promotion_path(promotion) %>
             <% active_html = promotion.active ? "<i class='fa-solid fa-circle-xmark'></i>" : "<i class='fa-solid fa-circle-check'></i>" %>
             <% change_word = promotion.active ? "Deactivate" : "Activate" %>
+            <!-- Admin can easily toggle promotion active/inactive -->
             <%= link_to active_html.html_safe, promotion_path(promotion, promotion: { active: promotion.active ? false : true }), data: { turbo_method: "put", turbo_confirm: "#{change_word} #{promotion.name} ?" } %>
-            <%# <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, promotion_path(promotion), data: { turbo_method: "delete", turbo_confirm: "Delete #{promotion.name} ?" } %>
           </div>
           <div id="category-sorter" class="hidden"><%= promotion.active ? "Active" : "Expired" %></div>
         <% end %>
       </div>
-
     <% end %>
   </div>
 </div>
