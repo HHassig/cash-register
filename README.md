@@ -135,10 +135,10 @@ This cash register was built using Ruby on Rails after a 9-week web development 
     - The link between the two allows the transaction model to be created and added to as the user desires, until marked as "paid"
   - Item info and promotion info pop-up on hover and are also available in the individual view pages
   - A piggy bank icon appears on an item card if there is an active promotion on said item, providing the user with relevant information
-  - Select how many items are desired and click the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/f0c25837a3fe0e03783b939559e088abcbfb3c4b/svgs/solid/cart-plus.svg" width="20" height="20"> icon
+  - Select how many items are desired and click the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/f0c25837a3fe0e03783b939559e088abcbfb3c4b/svgs/solid/cart-plus.svg" width="20" height="20" color="purple"> icon
   - To check out:
-    - Hover over the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/f0c25837a3fe0e03783b939559e088abcbfb3c4b/svgs/solid/cart-shopping.svg" width="20" height="20"> icon in the top right corner
-    - Click the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/f0c25837a3fe0e03783b939559e088abcbfb3c4b/svgs/solid/credit-card.svg" width="20" height="20"> icon to begin the checkout process
+    - Hover over the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/f0c25837a3fe0e03783b939559e088abcbfb3c4b/svgs/solid/cart-shopping.svg" width="20" height="20" color="purple"> icon in the top right corner
+    - Click the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/f0c25837a3fe0e03783b939559e088abcbfb3c4b/svgs/solid/credit-card.svg" width="20" height="20" color="purple"> icon to begin the checkout process
     - Your cart will exist in this state on the root page until this transaction is marked as "paid
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
