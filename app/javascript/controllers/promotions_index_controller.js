@@ -6,7 +6,7 @@ export default class extends Controller {
     const promotions = document.querySelectorAll(".item-card");
     const categoriesHTML = document.querySelectorAll("#category");
 
-    //set "all" font-size on load
+    //set "Active" font-size on load
     categoriesHTML[0].style["font-size"] = "1.5em";
 
     //show default category

@@ -12,12 +12,12 @@ export default class extends Controller {
     const cart = document.querySelector(".hover-popup-cart");
     let subTotal = 0.0;
     let cartItems = getOldItems(document.querySelectorAll(".cart-item"));
+
     // Change value in text field in accordance with "+" or "-"
     items.forEach((item) => {
       let amount = parseInt(item.querySelector(".amount-js").value);
       let plus = item.querySelector(".fa-circle-plus");
       let minus = item.querySelector(".fa-circle-minus");
-      // Get item quantities to add
       plus.addEventListener("click", function() {
         amount += 1;
         item.querySelector(".amount-js").value = amount;
@@ -29,51 +29,55 @@ export default class extends Controller {
         }
         item.querySelector(".amount-js").value = amount;
       });
-      // Add quantiy of items to "cart"
+
+      // Add # of items to "cart"
       item.querySelector(".fa-cart-plus").addEventListener("click", function() {
         // Get item info from rails into JS
-        let itemsLocation = cart.querySelector(".cart-items")
-        let itemName = item.querySelector("#item-name").innerText;
-        let itemID = parseInt(item.querySelector("#item-id").innerText);
-        let itemPrice = item.querySelector("#item-price").innerText;
-        //remove euro sign (will need to work with other currencies in future?)
-        let currencySign = itemPrice[0];
-        itemPrice = parseFloat(itemPrice.substring(1));
+        let itemHash = {
+          location: cart.querySelector(".cart-items"),
+          name: item.querySelector("#item-name").innerText,
+          id: parseInt(item.querySelector("#item-id").innerText),
+          price: parseFloat((item.querySelector("#item-price").innerText).substring(1)),
+          amount: amount
+        }
 
         // Promo info
-        let promoKind = item.querySelector("#promotion-kind").innerText;
-        let minQuantity = parseInt(item.querySelector("#promotion-minimum").innerText);
-        let salePrice = parseFloat(item.querySelector("#promotion-price").innerText);
-        let promoID = parseInt(item.querySelector("#promotion-id").innerText);
-        let itemPromo = {id: promoID, newPrice: salePrice, minimum: minQuantity, kind: promoKind, itemID: itemID};
-        if (itemPromo["kind"] === "bogo") {
-          amount *= 2;
-          itemPrice /= 2;
+        let promoHash = {
+              id: parseInt(item.querySelector("#promotion-id").innerText),
+              newPrice: parseFloat(item.querySelector("#promotion-price").innerText),
+              minimum: parseInt(item.querySelector("#promotion-minimum").innerText),
+              kind: item.querySelector("#promotion-kind").innerText,
+              itemID: itemHash["id"]};
+
+        // Buy 1 Get 1 math
+        if (promoHash["kind"] === "bogo") {
+          itemHash["amount"] *= 2;
+          itemHash["price"] /= 2;
         }
 
         // Add to cart on click
-        if (amount > 0) {
+        if (itemHash["amount"] > 0) {
           //check for duplicate items
-          cartItems = consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice, promoID, itemPrice * amount);
-          // cartItems.push({quantity: amount, id: itemID, name: itemName, price: itemPrice, promoID: promoID, totalPrice: itemPrice * amount});
-          itemsLocation.innerText = "";
+          cartItems = consolidateDuplicates(cartItems, itemHash, promoHash);
+
+          itemHash["location"].innerText = "";
           subTotal = 0.0;
           cartItems.forEach((cartItem) => {
             let basketTotal = cartItem["quantity"] * cartItem["price"];
             // Check for Promos!
-            if (parseInt(cartItem["id"]) === itemPromo["itemID"] && itemPromo["minimum"] <= parseInt(cartItem["quantity"]) && itemPromo["kind"] == "bulk") {
-              cartItem["price"] = itemPromo["newPrice"];
+            if (parseInt(cartItem["id"]) === promoHash["itemID"] && promoHash["minimum"] <= parseInt(cartItem["quantity"]) && promoHash["kind"] == "bulk") {
+              cartItem["price"] = promoHash["newPrice"];
               basketTotal = cartItem["quantity"] * cartItem["price"];
             }
 
-            itemsLocation.insertAdjacentHTML("beforeend", `<div class="cart-item">
+            itemHash["location"].insertAdjacentHTML("beforeend", `<div class="cart-item">
               <p id="cart-amount"><strong>${cartItem["quantity"]}</strong></p>
               <p id="cart-name">${cartItem["name"]}</p>
-              <p id="cart-subtotal">${currencySign}${(parseFloat(basketTotal).toFixed(2))}</p>
+              <p id="cart-subtotal">€${(parseFloat(basketTotal).toFixed(2))}</p>
               </div>`);
             subTotal += (basketTotal);
-            createBasket(cartItem, item, itemPrice, amount);
-            if (parseInt(cartItem["id"]) === itemPromo["itemID"] && itemPromo["kind"] === "bogo") {
+            createBasket(cartItem, item, itemHash["price"], itemHash["amount"]);
+            if (parseInt(cartItem["id"]) === promoHash["itemID"] && promoHash["kind"] === "bogo") {
               // Add double items and then re-calculate price as "half quantity, same price"
               amount /= 2;
               itemPrice *= 2;
@@ -83,12 +87,9 @@ export default class extends Controller {
           animate(item.querySelector(".fa-cart-plus"));
         }
         // push subtotal display
-        printSubTotal(subTotal, currencySign);
+        printSubTotal(subTotal, "€");
       });
     });
-
-
-
 
 
     //
@@ -115,14 +116,12 @@ export default class extends Controller {
     function getOldItems(oldCart) {
       let cartItems = []
       oldCart.forEach((oldItem) => {
-        let amount = parseInt(oldItem.querySelector("#cart-amount").innerText);
-        let itemID = parseInt(oldItem.querySelector("#cart-item-id").innerText);
-        let itemName = oldItem.querySelector("#cart-name").innerText;
-        let promoID = parseInt(oldItem.querySelector("#cart-promo-id").innerText);
-        let itemPrice = oldItem.querySelector("#cart-item-price").innerText;
-        let totalPrice = oldItem.querySelector("#cart-subtotal").innerText;
-        totalPrice = parseFloat(totalPrice.substring(1));
-        cartItems.push({quantity: amount, id: itemID, name: itemName, price: itemPrice, promoID: promoID, totalPrice: totalPrice});
+        cartItems.push({quantity: parseInt(oldItem.querySelector("#cart-amount").innerText),
+                        id: parseInt(oldItem.querySelector("#cart-item-id").innerText),
+                        name: oldItem.querySelector("#cart-name").innerText,
+                        price: oldItem.querySelector("#cart-item-price").innerText,
+                        promoID: parseInt(oldItem.querySelector("#cart-promo-id").innerText),
+                        totalPrice: parseFloat((oldItem.querySelector("#cart-subtotal").innerText).substring(1))});
       });
       return cartItems;
     }
@@ -141,22 +140,29 @@ export default class extends Controller {
       }
     }
 
-    function consolidateDuplicates(cartItems, amount, itemID, itemName, itemPrice, promoID, totalPrice) {
+    function consolidateDuplicates(cartItems, itemHash, promoHash) {
       let unique = true;
       cartItems.forEach((cartItem) => {
-        if (cartItem["id"] === itemID) {
+        if (cartItem["id"] === itemHash["id"]) {
           unique = false;
         }
       });
+      // Add quantity and update total price if item isn't unique
       if (!unique && cartItems.length > 0) {
         cartItems.forEach((cartItem) => {
-          if (cartItem["id"] === itemID) {
-            cartItem["quantity"] += amount;
+          if (cartItem["id"] === itemHash["id"]) {
+            cartItem["quantity"] += itemHash["amount"];
             cartItem["totalPrice"] = cartItem["quantity"] * cartItem["price"]
           }
         });
       } else {
-        cartItems.push({quantity: amount, id: itemID, name: itemName, price: itemPrice, promoID: promoID, totalPrice: totalPrice});
+        // Add everything about item if item is unique
+        cartItems.push({quantity: itemHash["amount"],
+                        id: itemHash["id"],
+                        name: itemHash["name"],
+                        price: itemHash["price"],
+                        promoID: promoHash["id"],
+                        totalPrice: itemHash["price"] * itemHash["quantity"]});
       }
       return cartItems;
     }
