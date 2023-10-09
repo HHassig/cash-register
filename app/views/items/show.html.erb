@@ -14,7 +14,7 @@
             <% if promotion.kind == "bogo" %>
               <p><strong>Buy 1 Get 1</strong></p>
             <% else %>
-              <p>€<s><%= @item.price %></s> €<strong><%= promotion.promo_price %></strong></p>
+              <p>€<s><%= @item.price %></s> €<strong><%= '%.2f' % promotion.promo_price %></strong></p>
             <% end %>
             <p>Minimum: <strong><%= promotion.min_quantity %></strong></p>
           </aside>
