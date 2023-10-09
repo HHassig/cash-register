@@ -1,14 +1,14 @@
 class TransactionsController < ApplicationController
   def index
-    @transactions = Transaction.where(user_id: current_user.id)
+    @transactions = current_user ? Transaction.where(user_id: current_user.id) : nil
   end
 
   def show
     @transaction = Transaction.find(params[:id])
     @baskets = CondenseBaskets.new(Basket.where(transaction_id: @transaction.id)).condense
     # A user is automatically redirected here on checkout so the following two lines always occur
-    UpdateTransaction.new(@transaction, @baskets).upate_tranasction_total
-    UpdateTransaction.new(@transaction, @baskets).upate_tranasction_savings
+    UpdateTransaction.new(@transaction, @baskets).update_transaction_savings
+    UpdateTransaction.new(@transaction, @baskets).update_transaction_total
   end
 
   def new

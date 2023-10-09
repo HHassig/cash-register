@@ -78,9 +78,9 @@ export default class extends Controller {
             subTotal += (basketTotal);
             createBasket(cartItem, item, itemHash["price"], itemHash["amount"]);
             if (parseInt(cartItem["id"]) === promoHash["itemID"] && promoHash["kind"] === "bogo") {
-              // Add double items and then re-calculate price as "half quantity, same price"
+              // Reset bogo additions
               amount /= 2;
-              itemPrice *= 2;
+              itemHash["price"] *= 2;
             }
           });
           //Animate cart plus icon
@@ -210,7 +210,7 @@ export default class extends Controller {
     }
 
     function sleep(ms) {
-      console.log(`Sleeping for ${ms/1000} seconds...`)
+      // console.log(`Sleeping for ${ms/1000} seconds...`);
       return new Promise(resolve => setTimeout(resolve, ms));
     }
   }

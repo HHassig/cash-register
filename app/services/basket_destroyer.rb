@@ -6,8 +6,11 @@ class BasketDestroyer
   end
 
   def destroy_baskets
-    @baskets.each do |basket|
-      basket.destroy
+    # Check that transaction is unpaid:
+    unless Transaction.find(@baskets.first.transaction_id).paid?
+      @baskets.each do |basket|
+        basket.destroy
+      end
     end
   end
 end

@@ -6,19 +6,10 @@ class UpdateTransaction
     @baskets = baskets
   end
 
-  def upate_tranasction_total
-    subtotal = 0.0
-    @baskets.each do |basket|
-      subtotal += basket[:quantity] * Item.find(basket[:item_id]).price
-    end
-    @transaction.subtotal = subtotal
-    @transaction.save!
-  end
-
-  def upate_tranasction_savings
+  def update_transaction_savings
     savings = 0.0
     @baskets.each do |basket|
-      promotion = Promotion.find(basket[:promotion_id])
+      promotion = Promotion.find(basket[:promotion_id]) if basket[:promotion_id].positive?
       if basket[:promotion_id].positive? && basket[:quantity] >= promotion.min_quantity
         savings += basket[:quantity] * (Item.find(basket[:item_id]).price - promotion.promo_price)
       end
@@ -26,4 +17,15 @@ class UpdateTransaction
     @transaction.savings = savings
     @transaction.save!
   end
+
+  def update_transaction_total
+    subtotal = 0.0
+    @baskets.each do |basket|
+      subtotal += basket[:quantity] * Item.find(basket[:item_id]).price
+    end
+    @transaction.subtotal = @transaction.savings.nil? ? subtotal : (subtotal - @transaction.savings)
+    @transaction.save!
+  end
+
+
 end

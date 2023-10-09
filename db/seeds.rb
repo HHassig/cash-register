@@ -49,7 +49,7 @@ Promotion.create!(item_id: 2,
                   kind: "bulk",
                   name: "Coffee Addiction",
                   active: true,
-                  promo_price: (11.23 * 2 / 3).round(2))
+                  promo_price: (11.23 * 2 / 3))
 
 Promotion.create!(item_id: 1,
                   kind: "bogo",

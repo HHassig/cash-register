@@ -226,6 +226,14 @@ GEM
     rspec-mocks (3.12.6)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
+    rspec-rails (6.0.3)
+      actionpack (>= 6.1)
+      activesupport (>= 6.1)
+      railties (>= 6.1)
+      rspec-core (~> 3.12)
+      rspec-expectations (~> 3.12)
+      rspec-mocks (~> 3.12)
+      rspec-support (~> 3.12)
     rspec-support (3.12.1)
     rubyzip (2.3.2)
     sassc (2.4.0)
@@ -300,6 +308,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.8)
   rspec
+  rspec-rails
   sassc-rails
   selenium-webdriver
   sentry-rails (~> 5.11)

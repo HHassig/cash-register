@@ -1,7 +1,7 @@
 <div class="container">
 <!-- User_id = 0 is a "guest account", these transactions will not be hidden -->
   <% if current_user && (current_user.id == @transaction.user_id || @transaction.user_id == 0) %>
-    <h1 id="transaction-h1">Transaction <%= @transaction.id %></h1>
+    <h1>Transaction <%= @transaction.id %></h1>
     <h3><%= link_to "<i class='fa-solid fa-backward'></i>".html_safe, transactions_path %></h3>
     <div class="transaction-info">
       <h3>Total: €<%= '%.2f' % @transaction.subtotal %></h3>
@@ -46,7 +46,9 @@
                 </aside>
               </div>
             <% end %>
-            <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, basket_path(basket), data: { turbo_method: "delete", turbo_confirm: "Remove items ?" } %>
+            <% unless @transaction.paid? %>
+              <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, basket_path(basket), data: { turbo_method: "delete", turbo_confirm: "Remove items ?" } %>
+            <% end %>
             </div>
         </div>
       <% end %>

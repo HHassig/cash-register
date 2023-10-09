@@ -123,9 +123,12 @@ This cash register was built using Ruby on Rails after a 9-week web development 
 <!-- USAGE EXAMPLES -->
 ## Usage
 - Total bill is presented, complete with all applicable sales and promotions
-- Users can see when an item is added to their cart, are able to see if a promotion has been applied, and save their transactions
+- Users can
+    - See when an item is added to their cart
+    - See if a promotion has been applied
+    - Remove items from cart
 - A new transaction is initiated when the user marks their current transaction as "paid" (to be later implemented as a full-fledged payment funnel)
-- An unpaid transaction is loaded on page reload
+- An unpaid transaction is loaded on page reload (might be the current (unpaid) transaction)
 - Flow:
   - A basket is a group of one item that the customer has decided to add to cart
   - Should the user add more of this item, it displays as one basket, but is multiple condensed baskets on the backend
@@ -156,7 +159,13 @@ This cash register was built using Ruby on Rails after a 9-week web development 
 
 <!-- Limitations -->
 ## Limitations
-- A **user** cannot edit or remove items from cart
+- A user cannot remove items from their cart until going to the transaction#show page
+  - This is a feature that would require more javascript coding and I ran out of time
+  - To do this, I would need to create a javascript function that calls the rails function of basket#destroy and passes the correct parameters
+  - This is a **POST** request
+- There is no guest checkout
+  - This is because al guests would be grouped together as owning every guest transaction, regardless of guestsID
+  - This can be solved later with **cookies**
 - Item inventory is not updated when a purchase is marked as paid
   - There is also no "temporary" inventory for items in carts but not paid for
 - SKU could be more robust to scale past ~20 items
