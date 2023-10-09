@@ -157,8 +157,6 @@ This cash register was built using Ruby on Rails after a 9-week web development 
 <!-- Limitations -->
 ## Limitations
 - A **user** cannot edit or remove items from cart
-- A nefarious actor might be able to play with prices when adding to basket
-  - This could be solved by adding a validation method to prices, not within the time-frame of this project
 - Item inventory is not updated when a purchase is marked as paid
   - There is also no "temporary" inventory for items in carts but not paid for
 - SKU could be more robust to scale past ~20 items
@@ -181,13 +179,19 @@ This cash register was built using Ruby on Rails after a 9-week web development 
 ## Learning
 
 * Address <a href="#limitations">limitations</a>
-* Keep Javascript and Rails better organized along the way
+* Would love to optimize the function that condenses baskets
+* Rails services keep the app clean and easily readable, very fun to experiment with and utilize
+* Keep Javascript organized along the way
   * At timesitems_index_controller.js was a mess of variables and flow that is unreadable to others
   * Simpler code, better comments, consistent names (and less variables)
+  * Refactoring for JavaScript is next on my learning list
+    * Finding the equivalent of Rails service functions, for example
 * Practice makes perfect
 * This was my first introduction to TDD and first time seriously using rspec
+  * Next time I will start testing earlier, better, and more often, saving later headaches
   * I think I did a good job given the constraints and definitely want to utilize this practice going forward
-  * Measure twice, cut once!
+  * **Measure twice, cut once!**
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

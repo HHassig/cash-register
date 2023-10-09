@@ -134,7 +134,7 @@ export default class extends Controller {
         item.querySelector("#basket_transaction_id").value = document.querySelector("#transaction-id").innerText;
         item.querySelector("#basket_quantity").value = amount;
         item.querySelector("#basket_promotion_id").value = cartItem["promoID"];
-        item.querySelector("#basket_subtotal").value = cartItem["price"] * cartItem["quantity"];
+        item.querySelector("#basket_subtotal").value = cartItem["price"] * amount;
         item.querySelector("#basket_cost_per_item").value = itemPrice;
         item.querySelector(".basket-submit").click();
       }

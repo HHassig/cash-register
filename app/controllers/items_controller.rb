@@ -3,8 +3,7 @@ class ItemsController < ApplicationController
     @items = Item.all
     @categories = Item.distinct.pluck(:category)
     @basket = Basket.new
-
-    # Check if user has an unpaid transaction and load that instead:
+    # Check if user has an unpaid transaction and load that instead of a new transaction:
     @transaction = SetTransaction.new(current_user).set_index_transaction
     @baskets = CondenseBaskets.new(Basket.where(transaction_id: @transaction.id)).condense
   end

@@ -7,9 +7,8 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.find(params[:id])
     @baskets = CondenseBaskets.new(Basket.where(transaction_id: @transaction.id)).condense
     # A user is automatically redirected here on checkout so the following two lines always occur
-    @transaction.savings = @transaction.get_savings(@baskets)
-    @transaction.subtotal = @transaction.get_subtotal(@baskets) - @transaction.savings
-    @transaction.save!
+    UpdateTransaction.new(@transaction, @baskets).upate_tranasction_total
+    UpdateTransaction.new(@transaction, @baskets).upate_tranasction_savings
   end
 
   def new
