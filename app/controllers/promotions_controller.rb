@@ -15,7 +15,7 @@ class PromotionsController < ApplicationController
   end
 
   def create
-    PromotionCreator.new(promotion_params).create_promotion
+    CreatePromotion.new(promotion_params).create
     redirect_to promotion_path(Promotion.last), notice: 'Promotion was successfully created.'
   end
 

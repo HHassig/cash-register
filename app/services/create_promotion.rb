@@ -1,11 +1,11 @@
-class PromotionCreator
+class CreatePromotion
   attr_reader :promotion_params
 
   def initialize(promotion_params)
     @promotion_params = promotion_params
   end
 
-  def create_promotion
+  def create
     promotion = Promotion.new(@promotion_params)
     promotion.active = true
     promotion.original_price = Item.find(promotion.item_id).price

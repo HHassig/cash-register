@@ -8,50 +8,50 @@ RSpec.describe UpdateTransaction do
       product_code: "GR1",
       name: "Green Tea",
       inventory_remaining: 1000,
-      price: "3.11")
+      price: 3.11)
     item2 = Item.create!(
       product_code: "SR1",
       name: "Strawberries",
       inventory_remaining: 1000,
-      price: "5.00")
-      item3 = Item.create!(
-        product_code: "CF1",
-        name: "Coffee",
-        inventory_remaining: 1000,
-        price: "11.23")
+      price: 5.00)
+    item3 = Item.create!(
+      product_code: "CF1",
+      name: "Coffee",
+      inventory_remaining: 1000,
+      price: 11.23)
 
-      promotion1 = Promotion.create!(item_id: item1.id,
+    promotion1 = Promotion.create!(item_id: item1.id,
       kind: "bogo",
       name: "CEO ❤️ GT",
       active: true,
       min_quantity: 2,
       promo_price: item1.price / 2)
-      promotion2 = Promotion.create!(item_id: item2.id,
-        kind: "bulk",
-        name: "Strawberries Bulk",
-        active: true,
-        min_quantity: 3,
-        promo_price: 4.50)
-      promotion3 = Promotion.create!(item_id: item3.id,
-        kind: "bulk",
-        name: "Coffee Bulk",
-        active: true,
-        min_quantity: 3,
-        promo_price: item3.price * 2 /3 )
+    promotion2 = Promotion.create!(item_id: item2.id,
+      kind: "bulk",
+      name: "Strawberries Bulk",
+      active: true,
+      min_quantity: 3,
+      promo_price: 4.50)
+    promotion3 = Promotion.create!(item_id: item3.id,
+      kind: "bulk",
+      name: "Coffee Bulk",
+      active: true,
+      min_quantity: 3,
+      promo_price: item3.price * 2 /3)
 
-    basket1 = Basket.new(transaction_id: 1,
+    basket1 = Basket.create!(transaction_id: 1,
                         item_id: item1.id,
                         quantity: 2,
                         promotion_id: promotion1.id)
-    basket2 = Basket.new(transaction_id: 2,
+    basket2 = Basket.create!(transaction_id: 2,
                       item_id: item2.id,
                       quantity: 3,
                       promotion_id: promotion2.id)
-    basket3 = Basket.new(transaction_id: 3,
+    basket3 = Basket.create!(transaction_id: 3,
                       item_id: item2.id,
                       quantity: 1,
                       promotion_id: promotion2.id)
-    basket4 = Basket.new(transaction_id: 3,
+    basket4 = Basket.create!(transaction_id: 3,
       item_id: item3.id,
       quantity: 3,
       promotion_id: promotion3.id)

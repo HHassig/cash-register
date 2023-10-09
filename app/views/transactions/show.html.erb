@@ -21,7 +21,7 @@
             <% end %>
             <div class="card-left">
               <p><%= item.name %></p>
-              <p><%= "<s>€#{item.price}</s> ".html_safe if promotion && item.price != price %>€<%= price %></p>
+              <p><%= "<s>€#{item.price}</s> ".html_safe if promotion && item.price != price %>€<%= '%.2f' % price %></p>
             </div>
             <div class="card-right">
               <p>Amt: <strong><%= basket[:quantity] %></strong></p>

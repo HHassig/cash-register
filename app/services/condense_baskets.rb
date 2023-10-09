@@ -27,12 +27,12 @@ class CondenseBaskets
     end
     index_of_items.each_with_index do |itemIndex, index|
       condensed << { item_id: unique_items[index],
-                      transaction_id: baskets[itemIndex[0]][:transaction_id],
-                      promotion_id: baskets[itemIndex[0]][:promotion_id],
-                      id: baskets[itemIndex[0]][:id],
+                      transaction_id: @baskets[itemIndex[0]][:transaction_id],
+                      promotion_id: @baskets[itemIndex[0]][:promotion_id],
+                      id: @baskets[itemIndex[0]][:id],
                       quantity: quantities[index],
-                      subtotal: quantity * baskets[itemIndex[0]][:cost_per_item],
-                      cost_per_item: baskets[itemIndex[0]][:cost_per_item] }
+                      subtotal: quantity * @baskets[itemIndex[0]][:cost_per_item],
+                      cost_per_item: @baskets[itemIndex[0]][:cost_per_item] }
     end
     condensed
   end

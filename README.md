@@ -197,9 +197,13 @@ This cash register was built using Ruby on Rails after a 9-week web development 
     * Finding the equivalent of Rails service functions, for example
 * Practice makes perfect
 * This was my first introduction to TDD and first time seriously using rspec
+* As a result, I started creating tests too late compared to best practices
+  * Instead, my tests involved being a user in the UI checking my work
   * Next time I will start testing earlier, better, and more often, saving later headaches
   * I think I did a good job given the constraints and definitely want to utilize this practice going forward
   * **Measure twice, cut once!**
+* RSpec **success**:
+  * <img src="https://fittechtravel.com/cash-register/rspec.png" alt="Rspec" width="80%">
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
