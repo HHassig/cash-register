@@ -8,6 +8,13 @@ class BasketsController < ApplicationController
     @basket.save!
   end
 
+  def destroy
+    BasketDestroyer.new(Basket.where(item_id: Basket.find(params[:id]).item_id,
+                                    transaction_id: Basket.find(params[:id]).transaction_id)).destroy_baskets
+    # This seems sloppy, but the fallback is the current transaction, found through the current basket's transactionID
+    redirect_back(fallback_location: transaction_path(Transaction.find(Basket.find(params[:id]).transaction_id)))
+  end
+
   private
 
   def basket_params

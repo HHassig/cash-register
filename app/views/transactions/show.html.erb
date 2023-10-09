@@ -46,6 +46,7 @@
                 </aside>
               </div>
             <% end %>
+            <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, basket_path(basket), data: { turbo_method: "delete", turbo_confirm: "Remove items ?" } %>
             </div>
         </div>
       <% end %>

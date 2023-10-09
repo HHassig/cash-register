@@ -248,6 +248,15 @@
   font-weight: bold;
   font-size: 1em;
 }
+.justify-items {
+  display: flex;
+  flex-direction: row;
+  // align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0em 1em 0em 1em;
+
+}
 .promotion_promo_price, .promotion_min_quantity, .promotion_discount {
   display: none;
 }
