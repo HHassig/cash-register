@@ -4,7 +4,8 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   connect() {
     // Get all categories and set listeners
-    categories(document.querySelectorAll("#category"));
+    const categoriesHTML = document.querySelectorAll(".category");
+    initializeCategories(categoriesHTML);
 
     // Iterate over each item and do all the math
     // itemIteration(items, cart, 0.0, cartItems);
@@ -96,7 +97,7 @@ export default class extends Controller {
     // Functions
     //
 
-    function categories(categoriesHTML) {
+    function initializeCategories(categoriesHTML) {
       //Set "all" font-size on load
       categoriesHTML[0].style["font-size"] = "1.5em";
       categoriesHTML.forEach((category) => {
@@ -190,13 +191,12 @@ export default class extends Controller {
       });
     }
 
-    function animate(html) {
+    async function animate(html) {
       html.style.color = "teal";
       html.style.fontSize = "2em";
-      sleep(1500).then(() => {
-        html.style.color = "black";
-        html.style.fontSize = "1.5em";
-      });
+      await sleep(1500);
+      html.style.color = "black";
+      html.style.fontSize = "1.5em";
     }
 
     function resetCategories(categoriesHTML) {

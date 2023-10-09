@@ -115,8 +115,13 @@ This cash register was built using Ruby on Rails after a 9-week web development 
    ```
 5. Open <a href="http://localhost:3000" target="_blank">localhost:3000</a> in your browser
 6. Login info (no need for tight security for a demo):
-  - admin@test.com
-  - 123456
+  - Administrator
+    - admin@test.com
+    - 123456
+  - User
+    - user@test.com
+    - 123456
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

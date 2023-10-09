@@ -4,9 +4,9 @@
     <h4><%= link_to "<i class='fa-solid fa-circle-plus'></i>".html_safe, new_item_path %></h4>
   <% end %>
   <div class="categories">
-    <h5 id="category">All</h5>
+    <h5 class="category">All</h5>
     <% @categories.each do |category| %>
-      <h5 id="category"><%= category.titleize %></h5>
+      <h5 class="category"><%= category.titleize %></h5>
     <% end %>
     <div class="hover-container">
       <h5 class="hover-target" tabindex="0"><i class="fa-solid fa-cart-shopping"></i></h5>
