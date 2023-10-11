@@ -13,33 +13,19 @@
       <aside class="hover-popup-cart">
         <h3>Cart</h3>
         <div class="cart-items">
-          <% total = 0 %>
-          <% @baskets.each do |basket| %>
-            <% promotion = Promotion.find(basket[:promotion_id]) if basket[:promotion_id].positive? %>
-            <% # Calculate subtotal based on whether there is a promotion or not %>
-            <% subtotal = promotion.nil? ? basket[:quantity] * basket[:cost_per_item] : basket[:quantity] * promotion.promo_price %>
-            <% total += subtotal %>
+          <% @basket_presenters.each do |basket_presenter| %>
             <div class="cart-item">
-              <p id="cart-amount"><strong><%= basket[:quantity] %></strong></p>
-              <% item = Item.find(basket[:item_id]) %>
+              <p id="cart-amount"><strong><%= basket_presenter[:quantity] %></strong></p>
               <div class="justify-items">
-                <p id="cart-name"><%= item.name %></p>
-                <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, basket_path(basket), data: { turbo_method: "delete", turbo_confirm: "Remove items ?" } %>
+                <p id="cart-name"><%= basket_presenter[:item].name %></p>
+                <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, basket_path(basket_presenter[:basket]), data: { turbo_method: "delete", turbo_confirm: "Remove items ?" } %>
               </div>
-              <p id="cart-subtotal">€<%= '%.2f' % subtotal %></p>
-                <% if !promotion.nil? and basket[:quantity] >= promotion.min_quantity %>
-                  <p id="cart-item-price" class="hidden"><%= promotion.promo_price %></p>
-                <% else %>
-                  <p id="cart-item-price" class="hidden"><%= basket[:cost_per_item] %></p>
-                <% end %>
-              <p id="cart-item-id" class="hidden"><%= item.id %></p>
-              <p id="cart-promo-id" class="hidden"><%= basket[:promotion_id] %></p>
+              <p id="cart-subtotal">€<%= '%.2f' % basket_presenter[:subtotal] %></p>
+              <p id="cart-item-price" class="hidden"><%= basket_presenter[:price]%></p>
+              <p id="cart-item-id" class="hidden"><%= basket_presenter[:item].id %></p>
+              <p id="cart-promo-id" class="hidden"><%= basket_presenter[:promotion_id] %></p>
             </div>
           <% end %>
-          <div class="subtotal-line">
-            <h6>Total</h6>
-            <h6><strong>€ <%= '%.2f' % total %></strong></h6>
-          </div>
         </div>
         <div class="subtotal"></div>
         <%= link_to(@transaction) do %>
@@ -49,21 +35,21 @@
     </div>
   </div>
   <div class="items">
-    <% @items.each do |item| %>
+    <% @item_presenters.each do |item_presenter| %>
       <div class="item-card">
-        <%= link_to "<img src='#{item.photo}'>".html_safe, item_path(item) %>
-        <h3 id="item-name"><%= link_to item.name, item_path(item) %></h3>
+        <%= link_to "<img src='#{item_presenter[:item].photo}'>".html_safe, item_path(item_presenter[:item]) %>
+        <h3 id="item-name"><%= link_to item_presenter[:item].name, item_path(item_presenter[:item]) %></h3>
         <div class="item-infos">
           <div class="hover-container">
             <i class="fa-solid fa-circle-info hover-target" tabindex="0"></i>
             <aside class="hover-popup">
-              <p><%= item.description %></p>
+              <p><%= item_presenter[:item].description %></p>
             </aside>
           </div>
           <% if current_user && current_user.admin? %>
-            <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_item_path(item) %>
+            <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_item_path(item_presenter[:item]) %>
           <% end %>
-          <% if item.inventory_remaining < 1 %>
+          <% if item_presenter[:item].inventory_remaining < 1 %>
             Sold out!
           <% end %>
           <div class="add-remove">
@@ -73,25 +59,20 @@
           </div>
         </div>
         <div class="item-infos">
-          <strong id="item-price">€<%= '%.2f' % item.price %></strong>
-          <% promotion = Promotion.find_by(item_id: item.id, active: true) %>
-          <% unless promotion.nil?%>
+          <strong id="item-price">€<%= '%.2f' % item_presenter[:item].price %></strong>
+          <% unless item_presenter[:promotion].nil?%>
             <div class="hover-container">
               <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
               <aside class="hover-popup">
-                <h5><%= link_to promotion.name, promotion_path(promotion) %></h5>
-                <% if promotion.kind == "bogo" %>
-                  <p><strong>Buy 1 Get 1</strong></p>
-                <% else %>
-                  <p>€<s><%= item.price %></s> €<strong id="promotion-price"><%= '%.2f' % promotion.promo_price %></strong></p>
-                <% end %>
-                <p><strong id="promotion-minimum"><%= promotion.min_quantity %></strong> minimum</p>
+                <h5><%= link_to item_presenter[:promotion].name, promotion_path(item_presenter[:promotion]) %></h5>
+                <p>€<s><%= item_presenter[:item].price %></s> <strong><%= item_presenter[:display_price] %></strong></p>
+                <p><strong id="promotion-minimum"><%= item_presenter[:promotion].min_quantity %></strong> minimum</p>
               </aside>
             </div>
-            <div id="promotion-id" class="hidden"><%= promotion.id %></div>
-            <div id="promotion-minimum" class="hidden"><%= promotion.min_quantity %></div>
-            <div id="promotion-price" class="hidden"><%= promotion.promo_price %></div>
-            <div id="promotion-kind" class="hidden"><%= promotion.kind %></div>
+            <div id="promotion-id" class="hidden"><%= item_presenter[:promotion].id %></div>
+            <div id="promotion-minimum" class="hidden"><%= item_presenter[:promotion].min_quantity %></div>
+            <div id="promotion-price" class="hidden"><%= item_presenter[:promotion].promo_price %></div>
+            <div id="promotion-kind" class="hidden"><%= item_presenter[:promotion].kind %></div>
           <% else %>
             <div id="promotion-minimum" class="hidden">0</div>
             <div id="promotion-kind" class="hidden">none</div>
@@ -100,8 +81,8 @@
           <% end %>
           <i class="fa-solid fa-cart-plus"></i>
         </div>
-        <div id="category-sorter" class="hidden"><%= item.category.titleize %></div>
-        <div id="item-id" class="hidden"><%= item.id %></div>
+        <div id="category-sorter" class="hidden"><%= item_presenter[:item].category.titleize %></div>
+        <div id="item-id" class="hidden"><%= item_presenter[:item].id %></div>
         <div id="transaction-id" class="hidden"><%= @transaction.id %></div>
         <%= simple_form_for @basket, :html => { class: "hidden" } do |f| %>
           <%= f.input :item_id, class: "basket-item-id" %>

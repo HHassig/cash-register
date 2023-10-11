@@ -1,15 +1,18 @@
 class ItemsController < ApplicationController
   def index
     @items = Item.all
+    @item_presenters = ItemPresenter.new(@items).to_hash
     @categories = Item.distinct.pluck(:category)
     @basket = Basket.new
     # Check if user has an unpaid transaction and load that instead of a new transaction:
     @transaction = SetTransaction.new(current_user).set_transaction
     @baskets = CondenseBaskets.new(Basket.where(transaction_id: @transaction.id)).condense
+    @basket_presenters = BasketPresenter.new(@baskets).to_hash
   end
 
   def show
     @item = Item.find(params[:id])
+    @promotion = MatchPromotion.new(@item).match
   end
 
   def new

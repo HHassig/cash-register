@@ -26,6 +26,4 @@ class UpdateTransaction
     @transaction.subtotal = @transaction.savings.nil? ? subtotal : (subtotal - @transaction.savings)
     @transaction.save!
   end
-
-
 end

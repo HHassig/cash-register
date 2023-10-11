@@ -5,21 +5,16 @@
     <%= "<img class='item-show' src='#{@item.photo}'>".html_safe %>
     <div class="item-infos">
       <strong><%= @item.category.titleize %></strong>
-      <% promotion = Promotion.find_by(item_id: @item.id, active: true) %>
-      <% unless promotion.nil? %>
+      <% unless @promotion.nil? %>
         <div class="hover-container">
           <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
           <aside class="hover-popup-cart">
-            <h5><%= promotion.name %></h5>
-            <% if promotion.kind == "bogo" %>
-              <p><strong>Buy 1 Get 1</strong></p>
-            <% else %>
-              <p>€<s><%= @item.price %></s> €<strong><%= '%.2f' % promotion.promo_price %></strong></p>
-            <% end %>
-            <p>Minimum: <strong><%= promotion.min_quantity %></strong></p>
+            <h5><%= @promotion[:name] %></h5>
+            <p>€<s><%= @item.price %></s> <strong><%= @promotion[:display_price] %></strong></p>
+            <p>Minimum: <strong><%= @promotion[:minimum_quantity] %></strong></p>
           </aside>
         </div>
-        <div id="promotion-id" class="hidden"><%= promotion.id %></div>
+        <div id="promotion-id" class="hidden"><%= @promotion[:id] %></div>
       <% else %>
         <div id="promotion-id" class="hidden">0</div>
       <% end %>
