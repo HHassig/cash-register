@@ -1,6 +1,7 @@
 class PromotionsController < ApplicationController
   def index
     @promotions = Promotion.all
+    @promotion_presenters = PromotionPresenter.new(@promotions).to_hash
   end
 
   def show

@@ -9,33 +9,28 @@
     <h5 id="category">Expired</h5>
   </div>
   <div class="items">
-    <% @promotions.each do |promotion| %>
+    <% @promotion_presenters.each do |promotion| %>
       <div class="item-card">
-        <% item = Item.find(promotion.item_id) %>
-        <%= link_to "<img src='#{item.photo}'>".html_safe, promotion_path(promotion) %>
-        <h3><%= link_to promotion.name, promotion_path(promotion) %></h3>
-        <h5><%= link_to item.name, item_path(item) %></h5>
+        <%= link_to "<img src='#{promotion[:item].photo}'>".html_safe, promotion_path(promotion[:promotion]) %>
+        <h3><%= link_to promotion[:promotion].name, promotion_path(promotion[:promotion]) %></h3>
+        <h5><%= link_to promotion[:item].name, item_path(promotion[:item]) %></h5>
         <div class="promo-links-wide">
-          <h6><strong><%= promotion.kind.capitalize %></strong>
-          <h6><%= promotion.active ? "<i class='fa-solid fa-circle-check'>Active</i>".html_safe : "<i class='fa-solid fa-circle-xmark'>Inactive</i>".html_safe %></h6>
+          <h6><strong><%= promotion[:promotion].kind.capitalize %></strong>
+          <h6><%= promotion[:promotion].active ? "<i class='fa-solid fa-circle-check'>Active</i>".html_safe : "<i class='fa-solid fa-circle-xmark'>Inactive</i>".html_safe %></h6>
         </div>
         <div class="promo-infos">
-          <% if promotion.kind == "bogo" %>
-            <p><strong>Buy 1 Get 1</strong></p>
-          <% else %>
-            <p>€<s><%= item.price %></s> €<strong><%= '%.2f' % promotion.promo_price %></strong></p>
-          <% end %>
-          <p><strong><%= promotion.min_quantity %></strong> minimum</p>
+          <p>€<s><%= promotion[:item].price %></s> <strong><%= promotion[:display_price] %></strong></p>
+          <p><strong><%= promotion[:promotion].min_quantity %></strong> minimum</p>
         </div>
         <% if current_user && current_user.admin? %>
           <div class="promo-links">
-            <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_promotion_path(promotion) %>
-            <% active_html = promotion.active ? "<i class='fa-solid fa-circle-xmark'></i>" : "<i class='fa-solid fa-circle-check'></i>" %>
-            <% change_word = promotion.active ? "Deactivate" : "Activate" %>
+            <%= link_to "<i class='fa-solid fa-pen-to-square'></i>".html_safe, edit_promotion_path(promotion[:promotion]) %>
+            <% active_html = promotion[:promotion].active ? "<i class='fa-solid fa-circle-xmark'></i>" : "<i class='fa-solid fa-circle-check'></i>" %>
+            <% change_word = promotion[:promotion].active ? "Deactivate" : "Activate" %>
             <!-- Admin can easily toggle promotion active/inactive -->
-            <%= link_to active_html.html_safe, promotion_path(promotion, promotion: { active: promotion.active ? false : true }), data: { turbo_method: "put", turbo_confirm: "#{change_word} #{promotion.name} ?" } %>
+            <%= link_to active_html.html_safe, promotion_path(promotion[:promotion], promotion: { active: promotion[:promotion].active ? false : true }), data: { turbo_method: "put", turbo_confirm: "#{change_word} #{promotion[:promotion].name} ?" } %>
           </div>
-          <div id="category-sorter" class="hidden"><%= promotion.active ? "Active" : "Expired" %></div>
+          <div id="category-sorter" class="hidden"><%= promotion[:promotion].active ? "Active" : "Expired" %></div>
         <% end %>
       </div>
     <% end %>
