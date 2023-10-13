@@ -8,12 +8,12 @@
         <!-- Empty & current transaction shouldnt show on transaction index -->
         <% unless !transaction.paid && Basket.find_by(transaction_id: transaction.id).nil? %>
           <div class="item-card">
-            <h3><%= link_to "#{transaction.id}", transaction_path(transaction) %></h3>
+            <h3><%= link_to "#{ transaction.id} ", transaction_path(transaction) %></h3>
             <div class="transaction-infos">
-              <h6>Savings: <%= transaction.savings.nil? ? "€0.00" : "€#{'%.2f' % transaction.savings}" %></h6>
+              <h6>Savings: <%= transaction.savings.nil? ? "€0.00" : "€#{ '%.2f' % transaction.savings }" %></h6>
             </div>
             <div class="transaction-infos">
-              <h4>Total: <%= "€#{'%.2f' % transaction.subtotal}" unless transaction.subtotal.nil? %></h4>
+              <h4>Total: <%= "€#{ '%.2f' % transaction.subtotal }" unless transaction.subtotal.nil? %></h4>
             </div>
             <div class="transaction-infos">
               <h4><%= transaction.paid ? "Paid" : "Unpaid" %></h4>

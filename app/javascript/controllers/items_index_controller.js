@@ -79,8 +79,7 @@ export default class extends Controller {
             subTotal += (basketTotal);
             createBasket(cartItem, item, itemHash["price"], itemHash["amount"]);
             if (parseInt(cartItem["id"]) === promoHash["itemID"] && promoHash["kind"] === "bogo") {
-              // Reset bogo additions
-              // amount /= 2;
+              // Reset bogo
               itemHash["price"] *= 2;
             }
           });

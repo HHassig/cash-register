@@ -9,6 +9,7 @@ class TransactionsController < ApplicationController
     # A user is automatically redirected here on checkout so the following two lines always occur
     UpdateTransaction.new(@transaction, @baskets).update_transaction_savings
     UpdateTransaction.new(@transaction, @baskets).update_transaction_total
+    @basket_presenters = BasketPresenter.new(@baskets).to_hash
   end
 
   def new

@@ -9,47 +9,32 @@
       <h5><%= @transaction.paid ? "Paid" : "#{link_to "<i class='fa-solid fa-square-check'></i> Mark as paid".html_safe, edit_transaction_path(@transaction), class: "no-decoration" }".html_safe %></h5>
     </div>
     <div id="baskets">
-      <% @baskets.each do |basket| %>
+      <% @basket_presenters.each do |basket| %>
         <div class="basket-card">
-          <div class="basket-infos">
-            <% item = Item.find(basket[:item_id]) %>
-            <% promotion = Promotion.find(basket[:promotion_id]) if basket[:promotion_id] > 0 %>
-            <% if basket[:promotion_id] > 0 && basket[:quantity] >= promotion.min_quantity &&  promotion.kind == "bulk" %>
-              <% price = Promotion.find(basket[:promotion_id]).promo_price %>
-            <% else %>
-              <% price = item.price %>
-            <% end %>
             <div class="card-left">
-              <p><%= item.name %></p>
-              <p><%= "<s>€#{item.price}</s> ".html_safe if promotion && item.price != price %>€<%= '%.2f' % price %></p>
+              <p><%= basket[:item].name %></p>
+              <p><%= "<s>€#{basket[:item].price}</s> ".html_safe if basket[:promotion] && basket[:item].price != basket[:price] %>€<%= '%.2f' % basket[:price] %></p>
             </div>
             <div class="card-right">
               <p>Amt: <strong><%= basket[:quantity] %></strong></p>
-              <% subtotal = price * basket[:quantity] %>
-              <% subtotal = price * basket[:quantity] / 2 if promotion && promotion.kind == "bogo" %>
-              <p><strong>€<%= '%.2f' % subtotal %></strong></p>
+              <p><strong>€<%= '%.2f' % basket[:subtotal] %></strong></p>
             </div>
-          </div>
           <div class="basket-infos">
-            <% unless promotion.nil?%>
+            <% unless basket[:promotion].nil?%>
               <div class="hover-container">
                 <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
                 <aside class="hover-popup">
-                  <h5><%= link_to promotion.name, promotion_path(promotion) %></h5>
-                  <%= promotion.active ? "<i class='fa-solid fa-circle-check'>Active</i>".html_safe : "<i class='fa-solid fa-circle-xmark'>Inactive</i>".html_safe %>
-                  <% if promotion.kind == "bogo" %>
-                    <p><strong>Buy 1 Get 1</strong></p>
-                  <% else %>
-                    <p>€<s><%= item.price %></s> €<strong id="promotion-price"><%= promotion.promo_price %></strong></p>
-                  <% end %>
-                  <p><strong id="promotion-minimum"><%= promotion.min_quantity %></strong> minimum</p>
+                  <h5><%= link_to basket[:promotion].name, promotion_path(basket[:promotion]) %></h5>
+                  <%= basket[:promotion].active ? "<i class='fa-solid fa-circle-check'>Active</i>".html_safe : "<i class='fa-solid fa-circle-xmark'>Inactive</i>".html_safe %>
+                  <p>€<s><%= basket[:item].price %></s> €<strong id="promotion-price"><%= '%.2f' % basket[:promotion].promo_price %></strong></p>
+                  <p><strong id="promotion-minimum"><%= basket[:promotion].min_quantity %></strong> minimum</p>
                 </aside>
               </div>
             <% end %>
             <% unless @transaction.paid? %>
-              <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, basket_path(basket), data: { turbo_method: "delete", turbo_confirm: "Remove items ?" } %>
+              <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, basket_path(basket[:basket]), data: { turbo_method: "delete", turbo_confirm: "Remove items ?" } %>
             <% end %>
-            </div>
+          </div>
         </div>
       <% end %>
     </div>

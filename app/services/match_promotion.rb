@@ -9,15 +9,7 @@ class MatchPromotion
     promotion = Promotion.find_by(item_id: @item.id, active: true)
     {
       promotion: promotion,
-      display_price: get_promotion_price(promotion),
-      minimum_quantity: promotion.min_quantity
+      display_price: DisplayPrice.new(promotion).get_price
     }
-  end
-
-  private
-
-  def get_promotion_price(promotion)
-    return nil if promotion.nil?
-    return promotion.kind == "bogo" ? "Buy 1 Get 1" : "€#{promotion.promo_price}"
   end
 end

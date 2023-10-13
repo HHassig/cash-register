@@ -1,0 +1,30 @@
+
+      <% @basket_presenters.each do |basket| %>
+        <div class="basket-card">
+            <div class="card-left">
+              <p><%= basket[:item].name %></p>
+              <p><%= "<s>€#{item.price}</s> ".html_safe if basket[:promotion] && basket[:item].price != basket[:price] %>€<%= '%.2f' % basket[:price] %></p>
+            </div>
+            <div class="card-right">
+              <p>Amt: <strong><%= basket[:quantity] %></strong></p>
+              <p><strong>€<%= '%.2f' % basket[:subtotal] %></strong></p>
+            </div>
+          </div>
+          <div class="basket-infos">
+            <% unless basket[:promotion].nil?%>
+              <div class="hover-container">
+                <p class="hover-target" tabindex="0"><i class="fa-solid fa-piggy-bank"></i></p>
+                <aside class="hover-popup">
+                  <h5><%= link_to basket[:promotion].name, promotion_path(basket[:promotion]) %></h5>
+                  <%= basket[:promotion].active ? "<i class='fa-solid fa-circle-check'>Active</i>".html_safe : "<i class='fa-solid fa-circle-xmark'>Inactive</i>".html_safe %>
+                  <p>€<s><%= basket[:item].price %></s> €<strong id="promotion-price"><%= basket[:promotion].promo_price %></strong></p>
+                  <p><strong id="promotion-minimum"><%= basket[:promotion].min_quantity %></strong> minimum</p>
+                </aside>
+              </div>
+            <% end %>
+            <% unless @transaction.paid? %>
+              <%= link_to "<i class='fa-solid fa-trash-can'></i>".html_safe, basket_path(basket[:basket]), data: { turbo_method: "delete", turbo_confirm: "Remove items ?" } %>
+            <% end %>
+            </div>
+        </div>
+      <% end %>

@@ -7,6 +7,7 @@ class PromotionsController < ApplicationController
   def show
     @promotion = Promotion.find(params[:id])
     @item = Item.find(@promotion.item_id)
+    @display_price = DisplayPrice.new(@promotion).get_price
   end
 
   def new

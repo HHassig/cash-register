@@ -15,7 +15,8 @@ class BasketPresenter
         promotion_id: promotion.nil? ? 0 : promotion.id,
         subtotal: basket[:quantity] * price,
         quantity: basket[:quantity],
-        basket: basket
+        basket: basket,
+        promotion: promotion
       }
     end
   end
@@ -27,6 +28,7 @@ class BasketPresenter
   end
 
   def get_price(basket, promotion)
-    promotion.nil? ? basket[:cost_per_item] : promotion.promo_price
+    return promotion.promo_price if basket[:quantity] >= promotion.min_quantity && !promotion.nil?
+    return basket[:cost_per_item]
   end
 end
